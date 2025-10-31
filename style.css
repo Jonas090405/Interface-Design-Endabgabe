@@ -20,7 +20,9 @@ body {
 }
 
 /* === Screens === */
-#start-screen, #stages, #end-screen {
+#start-screen,
+#stages,
+#end-screen {
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -35,7 +37,8 @@ body {
 }
 
 /* === Headings === */
-h1, h2 {
+h1,
+h2 {
   color: #B20CE9;
   text-transform: uppercase;
   text-align: center;
@@ -107,7 +110,8 @@ button:hover {
 .worst-btn.ready:hover,
 .worst-btn.notready:hover {
   position: relative;
-  color: transparent; /* Originaltext ausblenden */
+  color: transparent;
+  /* Originaltext ausblenden */
   transition: all 0.3s ease;
 }
 
@@ -146,8 +150,6 @@ button:hover {
 
 }
 
-
-
 /* === Link Dynamics === */
 .fake-link {
   color: #B20CE9;
@@ -178,7 +180,8 @@ button:hover {
 }
 
 /* === Error Message === */
-#error-msg, .error {
+#error-msg,
+.error {
   color: #B20CE9;
   font-weight: bold;
   margin-top: 10px;
@@ -187,7 +190,8 @@ button:hover {
 }
 
 /* === Inputs === */
-input, select {
+input,
+select {
   background: #0d0d0d;
   border: 2px solid #B20CE9;
   color: #ffffff;
@@ -199,7 +203,8 @@ input, select {
   transition: border 0.2s, box-shadow 0.2s;
 }
 
-input:focus, select:focus {
+input:focus,
+select:focus {
   border-color: #d17bf4;
   box-shadow: 0 0 10px #B20CE9;
 }
@@ -209,11 +214,14 @@ input:focus, select:focus {
   font-weight: bold;
   font-size: 1.3em;
   color: #ffffff;
-  background: #B20CE920;
-  padding: 4px 10px;
-  border-radius: 8px;
   margin-top: 12px;
-  box-shadow: inset 0 0 6px #B20CE930;
+  padding: 8px 18px;
+  border-radius: 14px;
+  display: inline-block;
+  backdrop-filter: blur(10px);
+  background: rgba(178, 12, 233, 0.15);
+  box-shadow: 0 0 25px rgba(178, 12, 233, 0.4);
+  animation: glowPulse 3s infinite;
 }
 
 #score {
@@ -225,14 +233,19 @@ input:focus, select:focus {
 
 /* === Subtle Animations === */
 @keyframes glowPulse {
-  0% { box-shadow: 0 0 6px #B20CE930; }
-  50% { box-shadow: 0 0 22px #B20CE980; }
-  100% { box-shadow: 0 0 6px #B20CE930; }
+  0% {
+    box-shadow: 0 0 6px #B20CE930;
+  }
+
+  50% {
+    box-shadow: 0 0 22px #B20CE980;
+  }
+
+  100% {
+    box-shadow: 0 0 6px #B20CE930;
+  }
 }
 
 .worst-btn.notready {
   animation: glowPulse 2.5s infinite;
 }
-
-
-

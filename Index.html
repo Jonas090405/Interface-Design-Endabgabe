@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
   <meta charset="UTF-8">
   <title>Minigame Prozess</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div id="app-container">
     <!-- Startscreen -->
     <div id="start-screen" style="display: flex;">
       <h1>Willkommen zur schlechtesten Nutzererfahrung jemals!</h1>
       <div id="game-description">
-        Dieses Spiel besteht aus mehreren Minigames, die vermeindlich einfache und alltägliche Aufgaben darstellen. Deine Aufgabe ist es, diese so schnell und korrekt wie möglich zu lösen.
-        Die Usability ist jedoch absichtlich extrem schlecht gestaltet, um deine Geduld und Problemlösungsfähigkeiten auf die Probe zu stellen.</div>
+        Dies ist ein Spiel, indem du so schnell wie möglich scheinbar einfache und alltägliche Aufgaben erledigen musst.
+      </div>
       <button id="ready-btn" class="worst-btn ready">Bereit</button>
       <div style="margin:14px 0 4px 0; font-size:0.95em;">
-        Bitte <span id="click-word" class="fake-link">klicke</span> <u>HIER</u> um zu <span class="highlight">starten</span>.
+        Bitte <span id="click-word" class="fake-link">klicke</span> <u>HIER</u> um zu <span
+          class="highlight">starten</span>.
       </div>
     </div>
 
@@ -24,7 +27,7 @@
       <h2 id="stage-title"></h2>
       <div id="stage-content"></div>
       <div id="error-msg" class="error"></div>
-      <div>Zeit: <span id="timer">0.00</span>s</div>
+      <div id="timer">Zeit: <span id="time-value">0.00</span>s</div>
       <button id="submit-btn">Absenden</button>
     </div>
 
@@ -38,4 +41,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>
