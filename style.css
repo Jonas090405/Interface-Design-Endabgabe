@@ -147,11 +147,11 @@ button:hover {
   box-shadow: inset 0 0 20px #B20CE940;
 }
 
-/* === Fake Hover State Preview inkl. Textwechsel === */
+/* === Fake Hover State Preview inkl. Textwechsel (nur für Start-Screen) === */
 
 /* Gemeinsame Vorbereitung: echten Text unsichtbar machen, wenn Hover aktiv ist */
-.worst-btn.ready:hover,
-.worst-btn.notready:hover {
+#start-screen .worst-btn.ready:hover,
+#start-screen .worst-btn.notready:hover {
   position: relative;
   color: transparent;
   /* Originaltext ausblenden */
@@ -159,7 +159,7 @@ button:hover {
 }
 
 /* Wenn Button 'Bereit' ist → Hover zeigt 'Nicht bereit' */
-.worst-btn.ready:hover::after {
+#start-screen .worst-btn.ready:hover::after {
   content: "Nicht bereit";
   color: #B20CE9;
   position: absolute;
@@ -173,7 +173,7 @@ button:hover {
 }
 
 /* Wenn Button 'Nicht bereit' ist → Hover zeigt 'Bereit' */
-.worst-btn.notready:hover::after {
+#start-screen .worst-btn.notready:hover::after {
   content: "Bereit";
   color: #ffffff;
   position: absolute;
@@ -187,10 +187,16 @@ button:hover {
 }
 
 /* (Optional) Leichtes visuelles Feedback */
-.worst-btn.ready:hover::after,
-.worst-btn.notready:hover::after {
+#start-screen .worst-btn.ready:hover::after,
+#start-screen .worst-btn.notready:hover::after {
   box-shadow: 0 0 50px #B20CE970, inset 0 0 20px #ffffff20;
+}
 
+/* Normaler Hover für End-Screen Restart Button */
+#end-screen .worst-btn.ready:hover {
+  background: #d17bf4;
+  box-shadow: 0 0 50px #B20CE9;
+  transform: scale(1.05);
 }
 
 /* === Link Dynamics === */
