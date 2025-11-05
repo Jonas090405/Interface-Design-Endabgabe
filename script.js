@@ -1,9 +1,13 @@
 const stages = [
   {
-    title: "WorstBuy: Bestelle dir den Gamersdream 5000",
+    title: "WorstBuy",
     content: `
       <div class="stage stage-1">
-        <div class="shop-header">
+        <div class="shop-top-section">
+          <div class="shop-branding">
+            <div class="shop-subtitle">WorstBuy</div>
+            <div class="shop-task">Bestelle dir den Gamersdream 5000</div>
+          </div>
           <div class="shop-search">
             <input type="text" id="search-field">
             <button id="search-btn">🔍</button>
@@ -13,13 +17,31 @@ const stages = [
         <div class="shop-container">
           <div class="filters">
             <h4>Filter</h4>
-            <label><input type="checkbox" class="filter" data-filter="cheap"> Preis &lt; 300€</label><br>
-            <label><input type="checkbox" class="filter" data-filter="expensive"> Preis &gt; 5000€</label><br>
-            <label><input type="checkbox" class="filter" data-filter="gaming"> Gaming</label><br>
-            <label><input type="checkbox" class="filter" data-filter="office"> Nicht Gaming</label><br>
-            <label><input type="checkbox" class="filter" data-filter="red"> Rot</label><br>
-            <label><input type="checkbox" class="filter" data-filter="black"> Schwarz</label><br>
-            <label><input type="checkbox" class="filter" data-filter="soldout"> Zeige nur ausverkaufte Produkte</label>
+            <label><input type="checkbox" class="filter" data-filter="cheap"> Günstig (&lt; 300€)</label><br>
+            <label><input type="checkbox" class="filter" data-filter="expensive"> Premium (&gt; 5000€)</label><br>
+            <label><input type="checkbox" class="filter" data-filter="medium"> Mittelklasse (500-2000€)</label><br>
+            <label><input type="checkbox" class="filter" data-filter="gaming"> Für Gaming</label><br>
+            <label><input type="checkbox" class="filter" data-filter="office"> Für Büro</label><br>
+            <label><input type="checkbox" class="filter" data-filter="notgaming"> Kein Gaming</label><br>
+            <label><input type="checkbox" class="filter" data-filter="notoffice"> Kein Büro</label><br>
+            <label><input type="checkbox" class="filter" data-filter="red"> Rote Farbe</label><br>
+            <label><input type="checkbox" class="filter" data-filter="black"> Schwarze Farbe</label><br>
+            <label><input type="checkbox" class="filter" data-filter="notred"> Nicht Rot</label><br>
+            <label><input type="checkbox" class="filter" data-filter="notblack"> Nicht Schwarz</label><br>
+            <label><input type="checkbox" class="filter" data-filter="soldout"> Nur Ausverkauft</label><br>
+            <label><input type="checkbox" class="filter" data-filter="available"> Nur Verfügbar</label><br>
+            <label><input type="checkbox" class="filter" data-filter="popular"> Beliebt</label><br>
+            <label><input type="checkbox" class="filter" data-filter="new"> Neu</label><br>
+            <label><input type="checkbox" class="filter" data-filter="old"> Klassiker</label><br>
+            <label><input type="checkbox" class="filter" data-filter="fast"> Schnelle Lieferung</label><br>
+            <label><input type="checkbox" class="filter" data-filter="slow"> Langsame Lieferung</label><br>
+            <label><input type="checkbox" class="filter" data-filter="eco"> Umweltfreundlich</label><br>
+            <label><input type="checkbox" class="filter" data-filter="performance"> Hohe Leistung</label><br>
+            <label><input type="checkbox" class="filter" data-filter="lowperformance"> Niedrige Leistung</label><br>
+            <label><input type="checkbox" class="filter" data-filter="warranty"> Mit Garantie</label><br>
+            <label><input type="checkbox" class="filter" data-filter="nowarranty"> Ohne Garantie</label><br>
+            <label><input type="checkbox" class="filter" data-filter="refurbished"> Generalüberholt</label><br>
+            <label><input type="checkbox" class="filter" data-filter="brand-new"> Fabrikneu</label><br>
           </div>
 
           <div class="shop-main">
@@ -135,19 +157,19 @@ const clickWord = document.getElementById("click-word");
 let ready = false;
 clickWord.classList.add("active-link");
 readyBtn.textContent = "Nicht bereit";
-readyBtn.classList.add("notready");
+readyBtn.classList.add("ready"); // Startet mit "ready" Farbe obwohl nicht bereit
 
 readyBtn.onclick = () => {
   ready = !ready;
   if (ready) {
-    readyBtn.textContent = "Bereit";
-    readyBtn.classList.add("ready");
-    readyBtn.classList.remove("notready");
+    readyBtn.textContent = "Nicht bereit"; // Zeigt immer "Nicht bereit"
+    readyBtn.classList.add("notready"); // Wechselt zu "notready" Farbe wenn bereit
+    readyBtn.classList.remove("ready");
     clickWord.classList.remove("active-link");
   } else {
-    readyBtn.textContent = "Nicht bereit";
-    readyBtn.classList.remove("ready");
-    readyBtn.classList.add("notready");
+    readyBtn.textContent = "Nicht bereit"; // Zeigt immer "Nicht bereit"
+    readyBtn.classList.remove("notready");
+    readyBtn.classList.add("ready"); // Wechselt zu "ready" Farbe wenn nicht bereit
     clickWord.classList.add("active-link");
   }
 };
@@ -178,6 +200,13 @@ function startStage(idx) {
   const st = stages[idx];
   const stagesScreen = document.getElementById("stages");
   stagesScreen.setAttribute("data-stage", idx);
+  
+  // Aktualisiere Stage-Anzeige
+  const stageIndicator = document.getElementById("stage-indicator");
+  if (stageIndicator) {
+    stageIndicator.textContent = `Stage ${idx + 1}/${stages.length}`;
+  }
+  
   document.getElementById("stage-title").textContent = st.title;
   document.getElementById("stage-content").innerHTML = st.content;
   document.getElementById("timer").textContent = "0.00s";
@@ -295,15 +324,45 @@ function initWorstShop() {
     cb.addEventListener("change", () => {
       const active = Array.from(filters).filter(f => f.checked).map(f => f.dataset.filter);
       renderProducts(p => {
-        return (
-          (active.includes("cheap") ? p.price < 300 : true) &&
-          (active.includes("expensive") ? p.price > 5000 : true) &&
-          (active.includes("gaming") ? p.category === "gaming" : true) &&
-          (active.includes("office") ? p.category === "office" : true) &&
-          (active.includes("red") ? p.color === "red" : true) &&
-          (active.includes("black") ? p.color === "black" : true) &&
-          (active.includes("soldout") ? p.soldout : true)
-        );
+        // Worst Practice: Viele widersprüchliche Filter die sich gegenseitig ausschließen
+        let passes = true;
+        
+        // Preisfilter
+        if (active.includes("cheap") && p.price >= 300) passes = false;
+        if (active.includes("expensive") && p.price <= 5000) passes = false;
+        if (active.includes("medium") && (p.price < 500 || p.price > 2000)) passes = false;
+        
+        // Kategorie-Filter (widersprüchlich!)
+        if (active.includes("gaming") && p.category !== "gaming") passes = false;
+        if (active.includes("office") && p.category !== "office") passes = false;
+        if (active.includes("notgaming") && p.category === "gaming") passes = false;
+        if (active.includes("notoffice") && p.category === "office") passes = false;
+        
+        // Farb-Filter (widersprüchlich!)
+        if (active.includes("red") && p.color !== "red") passes = false;
+        if (active.includes("black") && p.color !== "black") passes = false;
+        if (active.includes("notred") && p.color === "red") passes = false;
+        if (active.includes("notblack") && p.color === "black") passes = false;
+        
+        // Verfügbarkeits-Filter (widersprüchlich!)
+        if (active.includes("soldout") && !p.soldout) passes = false;
+        if (active.includes("available") && p.soldout) passes = false;
+        
+        // Sinnlose Filter die nichts tun aber Zeit verschwenden
+        if (active.includes("popular")) passes = passes && Math.random() > 0.1;
+        if (active.includes("new")) passes = passes && p.id > 15;
+        if (active.includes("old")) passes = passes && p.id <= 15;
+        if (active.includes("fast")) passes = passes && p.price > 1000;
+        if (active.includes("slow")) passes = passes && p.price < 1000;
+        if (active.includes("eco")) passes = passes && p.name.toLowerCase().includes("eco");
+        if (active.includes("performance")) passes = passes && p.category === "gaming";
+        if (active.includes("lowperformance")) passes = passes && p.category === "office";
+        if (active.includes("warranty")) passes = passes && !p.soldout;
+        if (active.includes("nowarranty")) passes = passes && p.soldout;
+        if (active.includes("refurbished")) passes = passes && p.soldout;
+        if (active.includes("brand-new")) passes = passes && !p.soldout;
+        
+        return passes;
       });
     });
   });
@@ -447,19 +506,21 @@ function showSearchStillPopup() {
       <h3>🔍 Suchst du immer noch?</h3>
       <p>Brauchst du Hilfe bei der Produktsuche?</p>
       <div class="newsletter-buttons">
-        <button class="newsletter-btn-yes" id="search-no">Nein, ich komme zurecht</button>
-        <button class="newsletter-btn-no" id="search-yes">Ja, ich brauche Hilfe</button>
+        <button class="newsletter-btn-yes" id="search-no">Ja aber ich brauch keine Hilfe</button>
+        <button class="newsletter-btn-no" id="search-yes">Nein, aber Hilfe wäre super</button>
       </div>
     </div>
   `;
   
   document.body.appendChild(popup);
   
+  // "Nein, aber Hilfe wäre super" (grüner Button) → schließt einfach und lässt weitermachen
   document.getElementById("search-no").onclick = () => {
     popup.classList.add("closing");
     setTimeout(() => popup.remove(), 3000);
   };
   
+  // "Ja aber ich brauch keine Hilfe" (roter Button) → führt ironischerweise zum Support
   document.getElementById("search-yes").onclick = () => {
     popup.classList.add("closing");
     setTimeout(() => {
@@ -980,8 +1041,8 @@ document.getElementById("restart-btn").onclick = () => {
   showScreen("start-screen");
   ready = false;
   readyBtn.textContent = "Nicht bereit";
-  readyBtn.classList.add("notready");
-  readyBtn.classList.remove("ready");
+  readyBtn.classList.add("ready"); // Startet mit "ready" Farbe obwohl nicht bereit
+  readyBtn.classList.remove("notready");
   clickWord.classList.add("active-link");
 };
 
