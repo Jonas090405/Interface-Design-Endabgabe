@@ -1,6 +1,6 @@
 const stages = [
   {
-    title: "WorstBuy",
+    title: "",
     content: `
       <div class="stage stage-1">
         <div class="shop-top-section">
@@ -9,8 +9,13 @@ const stages = [
             <div class="shop-task">Bestelle dir den Gamersdream 5000</div>
           </div>
           <div class="shop-search">
-            <input type="text" id="search-field">
-            <button id="search-btn">🔍</button>
+            <input type="text" id="search-field" placeholder="Suchen...">
+            <button id="search-btn">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M11 11L14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -120,32 +125,40 @@ const stages = [
 const products = [
   { id: 1, name: "OfficeBook 100", price: 250, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
   { id: 2, name: "StudentPro Basic", price: 499, category: "office", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 3, name: "Gamersdream 5000 Xtreme Ultra Performance", price: 5999, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 3, name: "Gamersdream 4000 Pro", price: 5899, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
   { id: 4, name: "CasualBook Mini", price: 199, category: "office", color: "black", soldout: true, img: "img/Placeholder.png" },
   { id: 5, name: "OverheatPro RGB", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
   { id: 6, name: "LagMachine 200", price: 699, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
   { id: 7, name: "OfficeBook Deluxe", price: 799, category: "office", color: "black", soldout: true, img: "img/Placeholder.png" },
   { id: 8, name: "SuperMegaLaptop 9000", price: 8999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
   { id: 9, name: "BudgetBook Eco", price: 179, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 10, name: "WorkStation Pro", price: 1299, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 11, name: "UltraGamer X1", price: 6499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 12, name: "SlimBook Air", price: 899, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 13, name: "PowerGaming Elite", price: 7299, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 14, name: "BasicOffice 50", price: 159, category: "office", color: "black", soldout: true, img: "img/Placeholder.png" },
-  { id: 15, name: "TurboLaptop MAX", price: 5499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 16, name: "CompactBook Mini Plus", price: 349, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 17, name: "RageGamer 3000", price: 4999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 18, name: "BusinessBook Premium", price: 1499, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 19, name: "HyperSpeed Gaming", price: 6799, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 20, name: "EcoBook Green", price: 299, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 21, name: "NitroGaming Beast", price: 8499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 22, name: "StudentBook Lite", price: 279, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 23, name: "ProGamer Ultimate", price: 9999, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 24, name: "OfficeElite 300", price: 699, category: "office", color: "black", soldout: true, img: "img/Placeholder.png" },
-  { id: 25, name: "MegaGaming Titan", price: 7999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 26, name: "SmartBook S1", price: 449, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 27, name: "ExtremeGamer Pro", price: 5799, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 28, name: "ValueBook 200", price: 229, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" }
+  { id: 10, name: "Gamersdream 3500 Gaming", price: 5799, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
+  { id: 11, name: "WorkStation Pro", price: 1299, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 12, name: "UltraGamer X1", price: 6499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
+  { id: 13, name: "SlimBook Air", price: 899, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 14, name: "PowerGaming Elite", price: 7299, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 15, name: "BasicOffice 50", price: 159, category: "office", color: "black", soldout: true, img: "img/Placeholder.png" },
+  { id: 16, name: "Gamerdream 5000 Pro", price: 5949, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 17, name: "TurboLaptop MAX", price: 5499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
+  { id: 18, name: "CompactBook Mini Plus", price: 349, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 19, name: "RageGamer 3000", price: 4999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
+  { id: 20, name: "Gamerstream 5000 Ultra", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
+  { id: 21, name: "BusinessBook Premium", price: 1499, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 22, name: "HyperSpeed Gaming", price: 6799, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 23, name: "Gamersdream 5000 Elite", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
+  { id: 24, name: "EcoBook Green", price: 299, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 25, name: "NitroGaming Beast", price: 8499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
+  { id: 26, name: "StudentBook Lite", price: 279, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 27, name: "Gamersdream 5000", price: 5999, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 28, name: "Gamersdream 5500 Turbo", price: 6099, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 29, name: "ProGamer Ultimate", price: 9999, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 30, name: "OfficeElite 300", price: 699, category: "office", color: "black", soldout: true, img: "img/Placeholder.png" },
+  { id: 31, name: "MegaGaming Titan", price: 7999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
+  { id: 32, name: "SmartBook S1", price: 449, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 33, name: "ExtremeGamer Pro", price: 5799, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 34, name: "Gamersdream 6000 Ultra", price: 6199, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
+  { id: 35, name: "Gamerzdream 5000 Plus", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
+  { id: 36, name: "ValueBook 200", price: 229, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" }
 ];
 
 let checkoutCompleted = false;
@@ -201,13 +214,32 @@ function startStage(idx) {
   const stagesScreen = document.getElementById("stages");
   stagesScreen.setAttribute("data-stage", idx);
   
-  // Aktualisiere Stage-Anzeige
+  // Aktualisiere Stage-Anzeige als Prozessverlauf mit Punkten
   const stageIndicator = document.getElementById("stage-indicator");
   if (stageIndicator) {
-    stageIndicator.textContent = `Stage ${idx + 1}/${stages.length}`;
+    // Erstelle Dots nur einmal, wenn noch nicht vorhanden
+    if (stageIndicator.children.length === 0) {
+      for (let i = 0; i < stages.length; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'stage-dot';
+        dot.dataset.index = i;
+        stageIndicator.appendChild(dot);
+      }
+    }
+    
+    // Update die Klassen basierend auf der aktuellen Stage
+    const dots = stageIndicator.querySelectorAll('.stage-dot');
+    dots.forEach((dot, i) => {
+      dot.classList.remove('completed', 'active', 'switching');
+      if (i < idx) {
+        dot.classList.add('completed');
+      } else if (i === idx) {
+        dot.classList.add('switching');
+      }
+    });
   }
   
-  document.getElementById("stage-title").textContent = st.title;
+  document.getElementById("stage-title").textContent = "";
   document.getElementById("stage-content").innerHTML = st.content;
   document.getElementById("timer").textContent = "0.00s";
 
@@ -306,11 +338,11 @@ function initWorstShop() {
       `;
 
       div.querySelector(".buy-btn").onclick = () => {
-        if (p.name.includes("Gamersdream")) {
+        if (p.name === "Gamersdream 5000") {
           showScreen("checkout-screen");
           setupCheckout();
         } else {
-          showErrorPopup("Fehler: Dieses Produkt ist aktuell nicht lieferbar.");
+          showErrorPopup("Falsches Produkt, Fehlercode jAD4y87");
         }
       };
 
@@ -670,6 +702,11 @@ function setupCheckout() {
     input.addEventListener("focus", function() {
       this.classList.add("active");
       this.select(); // Text wird markiert, muss aber manuell gelöscht werden
+    });
+    
+    // Bei Blur active-Klasse entfernen
+    input.addEventListener("blur", function() {
+      this.classList.remove("active");
     });
   });
 
