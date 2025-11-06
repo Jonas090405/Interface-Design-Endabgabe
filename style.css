@@ -832,7 +832,7 @@ select:focus {
   background: rgba(128, 128, 128, 0.7);
   backdrop-filter: blur(4px);
   padding: 4px 10px;
-  border-radius: 4px;
+  border-radius: 20px;
   font-size: 11px;
   font-weight: 500;
   color: #fff;
@@ -844,15 +844,15 @@ select:focus {
 .product-card-content {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0px;
   flex-grow: 1;
   width: 100%;
-  padding: 0 12px;
+  padding: 25px 12px 0 12px;
   box-sizing: border-box;
 }
 
 .product-card-actions {
-  margin-top: 8px;
+  margin-top: 0px;
   width: 100%;
   padding: 0;
   display: flex;
@@ -884,12 +884,12 @@ select:focus {
   display: flex;
   align-items: baseline;
   gap: 12px;
-  margin-top: 4px;
+  margin-top: 0px;
   min-height: 24px;
 }
 
 .product-card .price {
-  color: #B20CE9 !important;
+  color: #999 !important;
   font-size: 1em;
   font-weight: 700;
   margin: 0;
@@ -897,7 +897,7 @@ select:focus {
 
 .product-card small.soldout {
   font-size: 0.75em;
-  color: #999;
+  color: #666;
   margin: 0;
   line-height: 1;
 }
@@ -919,7 +919,7 @@ select:focus {
   align-items: center;
   justify-content: center;
   position: relative;
-  pointer-events: none;
+  pointer-events: auto;
   margin: 0;
   text-transform: none;
   letter-spacing: 0;
