@@ -123,42 +123,42 @@ const stages = [
 // Um eigene Bilder hinzuzufügen: Lege die Bilddatei in den "img/" Ordner und trage den Dateinamen hier ein
 // Beispiel: img: "img/mein-produkt.jpg" oder img: "img/mein-produkt.png"
 const products = [
-  { id: 1, name: "OfficeBook 100", price: 250, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 2, name: "StudentPro Basic", price: 499, category: "office", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 3, name: "Gamersdream 4000 Pro", price: 5899, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 4, name: "CasualBook Mini", price: 199, category: "office", color: "black", soldout: true, img: "img/Placeholder.png" },
-  { id: 5, name: "OverheatPro RGB", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 6, name: "LagMachine 200", price: 699, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 7, name: "OfficeBook Deluxe", price: 799, category: "office", color: "black", soldout: true, img: "img/Placeholder.png" },
-  { id: 8, name: "SuperMegaLaptop 9000", price: 8999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 9, name: "BudgetBook Eco", price: 179, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 10, name: "Gamersdream 3500 Gaming", price: 5799, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 11, name: "WorkStation Pro", price: 1299, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 12, name: "UltraGamer X1", price: 6499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 13, name: "SlimBook Air", price: 899, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 14, name: "PowerGaming Elite", price: 7299, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 15, name: "BasicOffice 50", price: 159, category: "office", color: "black", soldout: true, img: "img/Placeholder.png" },
-  { id: 16, name: "Gamerdream 5000 Pro", price: 5949, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 17, name: "TurboLaptop MAX", price: 5499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 18, name: "CompactBook Mini Plus", price: 349, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 19, name: "RageGamer 3000", price: 4999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 20, name: "Gamerstream 5000 Ultra", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 21, name: "BusinessBook Premium", price: 1499, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 22, name: "HyperSpeed Gaming", price: 6799, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 23, name: "Gamersdream 5000 Elite", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 24, name: "EcoBook Green", price: 299, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 25, name: "NitroGaming Beast", price: 8499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 26, name: "StudentBook Lite", price: 279, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 27, name: "Gamersdream 5000", price: 5999, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 28, name: "Gamersdream 5500 Turbo", price: 6099, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 29, name: "ProGamer Ultimate", price: 9999, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 30, name: "OfficeElite 300", price: 699, category: "office", color: "black", soldout: true, img: "img/Placeholder.png" },
-  { id: 31, name: "MegaGaming Titan", price: 7999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 32, name: "SmartBook S1", price: 449, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 33, name: "ExtremeGamer Pro", price: 5799, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 34, name: "Gamersdream 6000 Ultra", price: 6199, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png" },
-  { id: 35, name: "Gamerzdream 5000 Plus", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png" },
-  { id: 36, name: "ValueBook 200", price: 229, category: "office", color: "black", soldout: false, img: "img/Placeholder.png" }
+  { id: 1, name: "OfficeBook 100", price: 250, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Teuer"] },
+  { id: 2, name: "StudentPro Basic", price: 499, category: "office", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Unbeliebt"] },
+  { id: 3, name: "Gamersdream 4000 Pro", price: 5899, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Langsam"] },
+  { id: 4, name: "CasualBook Mini", price: 199, category: "office", color: "black", soldout: true, img: "img/Placeholder.png", tags: ["Groß"] },
+  { id: 5, name: "OverheatPro RGB", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Heiß"] },
+  { id: 6, name: "LagMachine 200", price: 699, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Vintage"] },
+  { id: 7, name: "OfficeBook Deluxe", price: 799, category: "office", color: "black", soldout: true, img: "img/Placeholder.png", tags: ["Fast Neu"] },
+  { id: 8, name: "Super Mega Laptop 9000", price: 8999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Mittel"] },
+  { id: 9, name: "BudgetBook Eco", price: 179, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Luxus"] },
+  { id: 10, name: "Gamersdream 3500 Gaming", price: 5799, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Günstig"] },
+  { id: 11, name: "WorkStation Pro", price: 1299, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Alt"] },
+  { id: 12, name: "UltraGamer X1", price: 6499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Schlecht"] },
+  { id: 13, name: "SlimBook Air", price: 899, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Dick"] },
+  { id: 14, name: "PowerGaming Elite", price: 7299, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Langsam"] },
+  { id: 15, name: "BasicOffice 50", price: 159, category: "office", color: "black", soldout: true, img: "img/Placeholder.png", tags: ["Premium"] },
+  { id: 16, name: "Gamerdream 5000 Pro", price: 5949, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Kalt"] },
+  { id: 17, name: "TurboLaptop MAX", price: 5499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Träge"] },
+  { id: 18, name: "CompactBook Mini Plus", price: 349, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Riesig"] },
+  { id: 19, name: "RageGamer 3000", price: 4999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Entspannt"] },
+  { id: 20, name: "Gamerstream 5000 Ultra", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Basic"] },
+  { id: 21, name: "BusinessBook Premium", price: 1499, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Billig"] },
+  { id: 22, name: "HyperSpeed Gaming", price: 6799, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Gemütlich"] },
+  { id: 23, name: "Gamersdream 5000 Elite", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Normal"] },
+  { id: 24, name: "EcoBook Green", price: 299, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Stromfresser"] },
+  { id: 25, name: "NitroGaming Beast", price: 8499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Zahm"] },
+  { id: 26, name: "StudentBook Lite", price: 279, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Schwer"] },
+  { id: 27, name: "Gamersdream 5000", price: 5999, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Besonders"] },
+  { id: 28, name: "Gamersdream 5500 Turbo", price: 6099, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Retro"] },
+  { id: 29, name: "ProGamer Ultimate", price: 9999, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Schnäppchen"] },
+  { id: 30, name: "OfficeElite 300", price: 699, category: "office", color: "black", soldout: true, img: "img/Placeholder.png", tags: ["Neu"] },
+  { id: 31, name: "MegaGaming Titan", price: 7999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Mini"] },
+  { id: 32, name: "SmartBook S1", price: 449, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Dumm"] },
+  { id: 33, name: "ExtremeGamer Pro", price: 5799, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Moderat"] },
+  { id: 34, name: "Gamersdream 6000 Ultra", price: 6199, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Durchschnitt"] },
+  { id: 35, name: "Gamerzdream 5000 Plus", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Minus"] },
+  { id: 36, name: "ValueBook 200", price: 229, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Luxus"] }
 ];
 
 let checkoutCompleted = false;
@@ -325,24 +325,33 @@ function initWorstShop() {
       div.className = "product-card";
       if (p.name.includes("Gamersdream")) div.classList.add("highlight-product");
 
+      const tagsHTML = p.tags ? p.tags.map(tag => `<span class="product-tag">${tag}</span>`).join('') : '';
+
       div.innerHTML = `
-        <img src="${p.img}" alt="${p.name}">
+        <div class="product-image-wrapper">
+          <img src="${p.img}" alt="${p.name}">
+          <div class="product-tags">${tagsHTML}</div>
+        </div>
         <div class="product-card-content">
           <p>${p.name}</p>
-          <p class="price">${p.price}€</p>
-          ${p.soldout ? "<small class='soldout'>Ausverkauft</small>" : ""}
+          <div class="price-row">
+            <p class="price">${p.price}€</p>
+            ${p.soldout ? "<small class='soldout'>Ausverkauft</small>" : ""}
+          </div>
         </div>
         <div class="product-card-actions">
-          <button class="buy-btn">Jetzt bestellen</button>
+          <button class="buy-btn"><span>Jetzt bestellen</span></button>
         </div>
       `;
 
-      div.querySelector(".buy-btn").onclick = () => {
+      const buyBtnSpan = div.querySelector(".buy-btn span");
+      buyBtnSpan.onclick = (e) => {
+        e.stopPropagation();
         if (p.name === "Gamersdream 5000") {
           showScreen("checkout-screen");
           setupCheckout();
         } else {
-          showErrorPopup("Falsches Produkt, Fehlercode jAD4y87");
+          showErrorPopup("Fehlercode 0x80070002");
         }
       };
 

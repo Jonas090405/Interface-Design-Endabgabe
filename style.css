@@ -67,6 +67,19 @@ body {
   animation: switchingDot 0.8s ease-in-out infinite;
 }
 
+/* Worst Practice: Ständig durchblinkende Dots */
+.stage-dot:nth-child(1) {
+  animation: dotBlink 2.1s infinite !important;
+}
+
+.stage-dot:nth-child(2) {
+  animation: dotBlink 2.1s infinite 0.7s !important;
+}
+
+.stage-dot:nth-child(3) {
+  animation: dotBlink 2.1s infinite 1.4s !important;
+}
+
 @keyframes switchingDot {
   0%, 100% {
     background: #333;
@@ -75,6 +88,17 @@ body {
   50% {
     background: #B20CE9;
     transform: scale(1.2);
+    box-shadow: 0 0 12px rgba(178, 12, 233, 0.6);
+  }
+}
+
+@keyframes dotBlink {
+  0%, 66%, 100% {
+    background: #333;
+    box-shadow: none;
+  }
+  33% {
+    background: #B20CE9;
     box-shadow: 0 0 12px rgba(178, 12, 233, 0.6);
   }
 }
@@ -163,6 +187,23 @@ button {
   text-transform: uppercase;
   letter-spacing: 0.8px;
   transition: all 0.25s ease;
+  min-height: 48px;
+}
+
+@media (max-width: 768px) {
+  button {
+    padding: 10px 24px;
+    font-size: 1.1em;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  button {
+    padding: 10px 20px;
+    font-size: 1em;
+    min-height: 42px;
+  }
 }
 
 
@@ -189,6 +230,22 @@ button {
   color: #B20CE9;
   border: 3px solid #B20CE9;
   box-shadow: inset 0 0 20px #B20CE940;
+}
+
+@media (max-width: 768px) {
+  .worst-btn {
+    font-size: 1.6em;
+    width: 300px;
+    height: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .worst-btn {
+    font-size: 1.4em;
+    width: 280px;
+    height: 80px;
+  }
 }
 
 /* === Fake Hover State Preview inkl. Textwechsel (nur für Start-Screen) === */
@@ -583,13 +640,16 @@ select:focus {
 
 .filters h4 {
   color: #ffffff;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
   margin-top: 0;
   font-size: 1.05em;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   font-weight: 700;
   text-shadow: none;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #333;
+  width: 100%;
 }
 
 /* Filter Scrollbar Styling */
@@ -704,102 +764,221 @@ select:focus {
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 64px;
-  justify-items: start;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  justify-items: stretch;
   margin-top: 40px;
 }
 
 @media (min-width: 769px) and (max-width: 1100px) {
   .product-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
   }
 }
 
 @media (min-width: 1101px) {
   .product-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
   }
 }
 
 /* ---------- PRODUKTKARTEN ---------- */
 .product-card {
-  background: #111;
-  border-radius: 14px;
-  padding: 16px 14px;
+  background: #1a1a1a;
+  border-radius: 20px;
+  padding: 0 0 12px 0;
   text-align: left;
   width: 100%;
-  max-width: 260px;
+  max-width: 100%;
+  min-height: 320px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  border: 1px solid #222;
-  min-height: 320px;
+  border: none;
   justify-content: space-between;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .product-card img {
-  border-radius: 10px;
-  margin-bottom: 10px;
+  border-radius: 20px 20px 0 0;
+  margin: 0;
   width: 100%;
-  height: 130px;
+  height: 180px;
   object-fit: cover;
   flex-shrink: 0;
+  background: #2a2a2a;
+}
+
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.product-tags {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1;
+}
+
+.product-tag {
+  background: rgba(128, 128, 128, 0.7);
+  backdrop-filter: blur(4px);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .product-card-content {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   flex-grow: 1;
   width: 100%;
+  padding: 0 12px;
+  box-sizing: border-box;
 }
 
 .product-card-actions {
-  margin-top: auto;
+  margin-top: 8px;
   width: 100%;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .product-card:hover {
-  transform: translateY(-40px);
-  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
+  transform: translateY(-25px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product-card p {
-  margin: 8px 0;
+  margin: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  width: 100%;
 }
 .product-card p:first-of-type {
   color: #fff;
   font-weight: 600;
-  font-size: 0.95em;
+  font-size: 0.9em;
+  line-height: 1.4;
+  min-height: 2.8em;
 }
-.product-card p:nth-of-type(2) {
-  color: #999;
-  font-size: 0.85em;
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 4px;
+  min-height: 24px;
 }
-.product-card small {
+
+.product-card .price {
+  color: #B20CE9 !important;
+  font-size: 1em;
+  font-weight: 700;
+  margin: 0;
+}
+
+.product-card small.soldout {
   font-size: 0.75em;
   color: #999;
-  margin-bottom: 6px;
+  margin: 0;
+  line-height: 1;
 }
 
 .buy-btn {
-  background: #2e2e2e;
+  background: #0d0d0d;
   color: #fff;
   border: none;
-  border-radius: 6px;
-  padding: 6px 10px;
-  font-weight: 500;
-  font-size: 0.9em;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  align-self: flex-start;
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-weight: 600;
+  font-size: 0.8em;
+  cursor: default;
+  transition: all 0.3s ease;
   width: 100%;
+  max-width: 200px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  pointer-events: none;
+  margin: 0;
+  text-transform: none;
+  letter-spacing: 0;
 }
 .buy-btn:hover {
-  background: #3b3b3b;
+  background: #2e2e2e;
+}
+
+.buy-btn span {
+  cursor: pointer;
+  padding: 4px 8px;
+  display: inline-block;
+  pointer-events: auto;
+  font-size: 1em;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .buy-btn {
+    padding: 10px 14px;
+    font-size: 0.95em;
+    min-height: 44px;
+    width: 70%;
+  }
+
+  .product-card {
+    max-width: 100%;
+  }
+
+  .product-card img {
+    height: 180px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-card {
+    min-height: 300px;
+  }
+
+  .product-card img {
+    height: 160px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 30px;
+  }
+
+  .buy-btn {
+    padding: 10px 12px;
+    font-size: 0.85em;
+    min-height: 42px;
+    width: 80%;
+  }
 }
 
 /* ---------- CHECKOUT SCREEN ---------- */
@@ -893,12 +1072,29 @@ select:focus {
   letter-spacing: 1px;
   transition: all 0.3s ease;
   box-shadow: none;
+  min-height: 60px;
 }
 
 .checkout-buy-btn:hover {
   background: #9a0bb8;
   box-shadow: none;
   transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+  .checkout-buy-btn {
+    padding: 14px 18px;
+    font-size: 1.2em;
+    min-height: 56px;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-buy-btn {
+    padding: 12px 16px;
+    font-size: 1.1em;
+    min-height: 52px;
+  }
 }
 
 .password-requirements {
@@ -950,6 +1146,30 @@ select:focus {
   background: #555;
 }
 
+/* Worst Practice: Ständig durchblinkende Dots */
+.progress-dot:nth-child(1) {
+  animation: dotBlink 2.1s infinite;
+}
+
+.progress-dot:nth-child(2) {
+  animation: dotBlink 2.1s infinite 0.7s;
+}
+
+.progress-dot:nth-child(3) {
+  animation: dotBlink 2.1s infinite 1.4s;
+}
+
+@keyframes dotBlink {
+  0%, 66%, 100% {
+    background: #333;
+    box-shadow: none;
+  }
+  33% {
+    background: #B20CE9;
+    box-shadow: 0 0 12px rgba(178, 12, 233, 0.6);
+  }
+}
+
 .bottom-ui {
   position: fixed;
   bottom: 30px;
@@ -995,6 +1215,7 @@ select:focus {
   justify-content: center;
   z-index: 9999;
   animation: popupFadeIn 0.3s ease;
+  overflow: hidden;
 }
 
 @keyframes popupFadeIn {
@@ -1008,6 +1229,7 @@ select:focus {
 
 .error-popup.closing {
   animation: popupFadeOut 4s ease forwards;
+  pointer-events: none;
 }
 
 @keyframes popupFadeOut {
@@ -1047,6 +1269,8 @@ select:focus {
   position: absolute;
   width: 40px;
   height: 40px;
+  min-width: 40px;
+  min-height: 40px;
   background: #B20CE9;
   border: 2px solid #fff;
   border-radius: 50%;
@@ -1061,6 +1285,8 @@ select:focus {
   line-height: 1;
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .error-popup-close:hover {
