@@ -71,32 +71,40 @@ const stages = [
   },
 
   {
-    title: "Stage 2: Formular ausfüllen",
+    title: "",
     content: `
-      <div style="max-width: 600px; margin: 0 auto; padding: 40px; text-align: left;">
-        <p style="color: #ccc; margin-bottom: 20px;">Fülle das folgende Formular aus:</p>
-        <div style="display: flex; flex-direction: column; gap: 15px;">
-          <input id="stage2-name" type="text" placeholder="Name" style="padding: 12px; border-radius: 8px; border: 2px solid #B20CE9; background: #0d0d0d; color: #fff; font-size: 1em;">
-          <input id="stage2-email" type="text" placeholder="E-Mail" style="padding: 12px; border-radius: 8px; border: 2px solid #B20CE9; background: #0d0d0d; color: #fff; font-size: 1em;">
-          <select id="stage2-option" style="padding: 12px; border-radius: 8px; border: 2px solid #B20CE9; background: #0d0d0d; color: #fff; font-size: 1em;">
-            <option value="">-- Bitte wählen --</option>
-            <option value="option1">Option A</option>
-            <option value="option2">Option B</option>
-            <option value="option3">Option C</option>
-          </select>
+      <div class="stage stage-2">
+        <div class="shitstagram-header">
+          <div class="shitstagram-branding">
+            <div class="shitstagram-subtitle">Shitstagram</div>
+            <div class="shitstagram-task">Sende den neusten Post von "Trafish cod" an deinen Freund Dieter</div>
+          </div>
+          <div class="shitstagram-top-actions">
+            <button class="shitstagram-icon-btn" id="shitstagram-search-btn">
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M11 11L14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <button class="shitstagram-icon-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="shitstagram-feed" id="shitstagram-feed">
+          <!-- Feed wird dynamisch geladen -->
         </div>
       </div>
     `,
     validate: () => {
-      const name = document.getElementById("stage2-name").value.trim();
-      const email = document.getElementById("stage2-email").value.trim();
-      const option = document.getElementById("stage2-option").value;
-      
-      if (!name) return "Bitte gib deinen Namen ein!";
-      if (!email || !email.includes("@")) return "Bitte gib eine gültige E-Mail ein!";
-      if (!option) return "Bitte wähle eine Option aus!";
-      
-      return ""; // Erfolgreich
+      // Prüfe ob Post an Dieter gesendet wurde
+      if (!window.shitStagramShared) {
+        return "Du musst den neusten Post von 'Trafish cod' an Dieter senden!";
+      }
+      return "";
     }
   },
   
@@ -123,42 +131,42 @@ const stages = [
 // Um eigene Bilder hinzuzufügen: Lege die Bilddatei in den "img/" Ordner und trage den Dateinamen hier ein
 // Beispiel: img: "img/mein-produkt.jpg" oder img: "img/mein-produkt.png"
 const products = [
-  { id: 1, name: "OfficeBook 100", price: 250, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Teuer"] },
-  { id: 2, name: "StudentPro Basic", price: 499, category: "office", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Unbeliebt"] },
-  { id: 3, name: "Gamersdream 4000 Pro", price: 5899, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Langsam"] },
-  { id: 4, name: "CasualBook Mini", price: 199, category: "office", color: "black", soldout: true, img: "img/Placeholder.png", tags: ["Groß"] },
-  { id: 5, name: "OverheatPro RGB", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Heiß"] },
-  { id: 6, name: "LagMachine 200", price: 699, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Vintage"] },
-  { id: 7, name: "OfficeBook Deluxe", price: 799, category: "office", color: "black", soldout: true, img: "img/Placeholder.png", tags: ["Fast Neu"] },
-  { id: 8, name: "Super Mega Laptop 9000", price: 8999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Mittel"] },
-  { id: 9, name: "BudgetBook Eco", price: 179, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Luxus"] },
-  { id: 10, name: "Gamersdream 3500 Gaming", price: 5799, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Günstig"] },
-  { id: 11, name: "WorkStation Pro", price: 1299, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Alt"] },
-  { id: 12, name: "UltraGamer X1", price: 6499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Schlecht"] },
-  { id: 13, name: "SlimBook Air", price: 899, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Dick"] },
-  { id: 14, name: "PowerGaming Elite", price: 7299, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Langsam"] },
-  { id: 15, name: "BasicOffice 50", price: 159, category: "office", color: "black", soldout: true, img: "img/Placeholder.png", tags: ["Premium"] },
-  { id: 16, name: "Gamerdream 5000 Pro", price: 5949, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Kalt"] },
-  { id: 17, name: "TurboLaptop MAX", price: 5499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Träge"] },
-  { id: 18, name: "CompactBook Mini Plus", price: 349, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Riesig"] },
-  { id: 19, name: "RageGamer 3000", price: 4999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Entspannt"] },
-  { id: 20, name: "Gamerstream 5000 Ultra", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Basic"] },
-  { id: 21, name: "BusinessBook Premium", price: 1499, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Billig"] },
-  { id: 22, name: "HyperSpeed Gaming", price: 6799, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Gemütlich"] },
-  { id: 23, name: "Gamersdream 5000 Elite", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Normal"] },
-  { id: 24, name: "EcoBook Green", price: 299, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Stromfresser"] },
-  { id: 25, name: "NitroGaming Beast", price: 8499, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Zahm"] },
-  { id: 26, name: "StudentBook Lite", price: 279, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Schwer"] },
-  { id: 27, name: "Gamersdream 5000", price: 5999, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Besonders"] },
-  { id: 28, name: "Gamersdream 5500 Turbo", price: 6099, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Retro"] },
-  { id: 29, name: "ProGamer Ultimate", price: 9999, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Schnäppchen"] },
-  { id: 30, name: "OfficeElite 300", price: 699, category: "office", color: "black", soldout: true, img: "img/Placeholder.png", tags: ["Neu"] },
-  { id: 31, name: "MegaGaming Titan", price: 7999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Mini"] },
-  { id: 32, name: "SmartBook S1", price: 449, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Dumm"] },
-  { id: 33, name: "ExtremeGamer Pro", price: 5799, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Moderat"] },
-  { id: 34, name: "Gamersdream 6000 Ultra", price: 6199, category: "gaming", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Durchschnitt"] },
-  { id: 35, name: "Gamerzdream 5000 Plus", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/Placeholder.png", tags: ["Minus"] },
-  { id: 36, name: "ValueBook 200", price: 229, category: "office", color: "black", soldout: false, img: "img/Placeholder.png", tags: ["Luxus"] }
+  { id: 1, name: "OfficeBook 100", price: 250, category: "office", color: "black", soldout: false, img: "img/PC1.png", tags: ["Teuer"] },
+  { id: 2, name: "StudentPro Basic", price: 499, category: "office", color: "red", soldout: false, img: "img/PC2.png", tags: ["Unbeliebt"] },
+  { id: 3, name: "Gamersdream 4000 Pro", price: 5899, category: "gaming", color: "black", soldout: false, img: "img/PC3.png", tags: ["Langsam"] },
+  { id: 4, name: "CasualBook Mini", price: 199, category: "office", color: "black", soldout: true, img: "img/PC4.png", tags: ["Groß"] },
+  { id: 5, name: "OverheatPro RGB", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/PC5.png", tags: ["Heiß"] },
+  { id: 6, name: "LagMachine 200", price: 699, category: "gaming", color: "black", soldout: false, img: "img/PC6.png", tags: ["Vintage"] },
+  { id: 7, name: "OfficeBook Deluxe", price: 799, category: "office", color: "black", soldout: true, img: "img/PC7.png", tags: ["Fast Neu"] },
+  { id: 8, name: "Super Mega Laptop 9000", price: 8999, category: "gaming", color: "red", soldout: false, img: "img/PC8.png", tags: ["Mittel"] },
+  { id: 9, name: "BudgetBook Eco", price: 179, category: "office", color: "black", soldout: false, img: "img/PC9.png", tags: ["Luxus"] },
+  { id: 10, name: "Gamersdream 3500 Gaming", price: 5799, category: "gaming", color: "red", soldout: false, img: "img/PC10.png", tags: ["Günstig"] },
+  { id: 11, name: "WorkStation Pro", price: 1299, category: "office", color: "black", soldout: false, img: "img/PC1.png", tags: ["Alt"] },
+  { id: 12, name: "UltraGamer X1", price: 6499, category: "gaming", color: "red", soldout: false, img: "img/PC2.png", tags: ["Schlecht"] },
+  { id: 13, name: "SlimBook Air", price: 899, category: "office", color: "black", soldout: false, img: "img/PC3.png", tags: ["Dick"] },
+  { id: 14, name: "PowerGaming Elite", price: 7299, category: "gaming", color: "black", soldout: false, img: "img/PC4.png", tags: ["Langsam"] },
+  { id: 15, name: "BasicOffice 50", price: 159, category: "office", color: "black", soldout: true, img: "img/PC5.png", tags: ["Premium"] },
+  { id: 16, name: "Gamerdream 5000 Pro", price: 5949, category: "gaming", color: "black", soldout: false, img: "img/PC6.png", tags: ["Kalt"] },
+  { id: 17, name: "TurboLaptop MAX", price: 5499, category: "gaming", color: "red", soldout: false, img: "img/PC7.png", tags: ["Träge"] },
+  { id: 18, name: "CompactBook Mini Plus", price: 349, category: "office", color: "black", soldout: false, img: "img/PC8.png", tags: ["Riesig"] },
+  { id: 19, name: "RageGamer 3000", price: 4999, category: "gaming", color: "red", soldout: false, img: "img/PC9.png", tags: ["Entspannt"] },
+  { id: 20, name: "Gamerstream 5000 Ultra", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/PC10.png", tags: ["Basic"] },
+  { id: 21, name: "BusinessBook Premium", price: 1499, category: "office", color: "black", soldout: false, img: "img/PC1.png", tags: ["Billig"] },
+  { id: 22, name: "HyperSpeed Gaming", price: 6799, category: "gaming", color: "black", soldout: false, img: "img/PC2.png", tags: ["Gemütlich"] },
+  { id: 23, name: "Gamersdream 5000 Elite", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/PC3.png", tags: ["Normal"] },
+  { id: 24, name: "EcoBook Green", price: 299, category: "office", color: "black", soldout: false, img: "img/PC4.png", tags: ["Stromfresser"] },
+  { id: 25, name: "NitroGaming Beast", price: 8499, category: "gaming", color: "red", soldout: false, img: "img/PC5.png", tags: ["Zahm"] },
+  { id: 26, name: "StudentBook Lite", price: 279, category: "office", color: "black", soldout: false, img: "img/PC6.png", tags: ["Schwer"] },
+  { id: 27, name: "Gamersdream 5000", price: 5999, category: "gaming", color: "black", soldout: false, img: "img/PC7.png", tags: ["Besonders"] },
+  { id: 28, name: "Gamersdream 5500 Turbo", price: 6099, category: "gaming", color: "black", soldout: false, img: "img/PC8.png", tags: ["Retro"] },
+  { id: 29, name: "ProGamer Ultimate", price: 9999, category: "gaming", color: "black", soldout: false, img: "img/PC9.png", tags: ["Schnäppchen"] },
+  { id: 30, name: "OfficeElite 300", price: 699, category: "office", color: "black", soldout: true, img: "img/PC10.png", tags: ["Neu"] },
+  { id: 31, name: "MegaGaming Titan", price: 7999, category: "gaming", color: "red", soldout: false, img: "img/PC1.png", tags: ["Mini"] },
+  { id: 32, name: "SmartBook S1", price: 449, category: "office", color: "black", soldout: false, img: "img/PC2.png", tags: ["Dumm"] },
+  { id: 33, name: "ExtremeGamer Pro", price: 5799, category: "gaming", color: "black", soldout: false, img: "img/PC3.png", tags: ["Moderat"] },
+  { id: 34, name: "Gamersdream 6000 Ultra", price: 6199, category: "gaming", color: "black", soldout: false, img: "img/PC4.png", tags: ["Durchschnitt"] },
+  { id: 35, name: "Gamerzdream 5000 Plus", price: 5999, category: "gaming", color: "red", soldout: false, img: "img/PC5.png", tags: ["Minus"] },
+  { id: 36, name: "ValueBook 200", price: 229, category: "office", color: "black", soldout: false, img: "img/PC6.png", tags: ["Luxus"] }
 ];
 
 let checkoutCompleted = false;
@@ -280,6 +288,9 @@ function startStage(idx) {
     initWorstShop();
     startRandomPopups();
     startSearchPopup();
+  } else if (idx === 1) {
+    // Stage 2: Shitstagram Setup
+    initShitstagram();
   } else if (idx === 2) {
     // Stage 3: Klick-Challenge Setup
     let clicks = 0;
@@ -289,6 +300,28 @@ function startStage(idx) {
       btn.onclick = () => {
         clicks++;
         countSpan.textContent = clicks;
+        
+        // Bei genau 10 Klicks: automatisch zur nächsten Stage
+        if (clicks === 10) {
+          clearInterval(timerInterval);
+          const stageTime = (Date.now() - startTime) / 1000;
+          const stagePoints = Math.max(0, Math.round(1000 - (stageTime * 8.33)));
+          totalScore += stagePoints;
+          
+          console.log(`Stage ${currentStage + 1} abgeschlossen in ${stageTime.toFixed(2)}s - Punkte: ${stagePoints}`);
+          
+          // Zeige Success-Overlay
+          showSuccessOverlay(() => {
+            // Zur nächsten Stage oder End-Screen
+            if (currentStage < stages.length - 1) {
+              currentStage++;
+              startStage(currentStage);
+            } else {
+              document.getElementById("final-score").textContent = totalScore;
+              showScreen("end-screen");
+            }
+          });
+        }
       };
     }
   }
@@ -340,7 +373,7 @@ function initWorstShop() {
           </div>
         </div>
         <div class="product-card-actions">
-          <button class="buy-btn"><span>Jetzt bestellen</span></button>
+          <button class="buy-btn"><span>Konfigurieren</span></button>
         </div>
       `;
 
@@ -348,8 +381,7 @@ function initWorstShop() {
       buyBtnSpan.onclick = (e) => {
         e.stopPropagation();
         if (p.name === "Gamersdream 5000") {
-          showScreen("checkout-screen");
-          setupCheckout();
+          showProductConfig(p);
         } else {
           showErrorPopup("Fehlercode 0x80070002");
         }
@@ -431,9 +463,167 @@ function initWorstShop() {
   };
 }
 
+// --- PRODUKTKONFIGURATION (Worst Practice UX) ---
+function showProductConfig(product) {
+  const configPopup = document.createElement("div");
+  configPopup.className = "error-popup";
+  configPopup.id = "product-config-popup";
+  configPopup.innerHTML = `
+    <div class="config-popup-content">
+      <button class="config-close-btn" id="config-close-btn">×</button>
+      <h3 style="color: #B20CE9; margin-bottom: 30px; font-size: 1.5em;">${product.name} - Konfiguration</h3>
+      
+      <div class="config-section">
+        <label class="config-label">Prozessor auswählen:</label>
+        <div class="config-options">
+          <button class="config-option-btn" data-option="cpu" data-value="i3">Intel i3 (langsam)</button>
+          <button class="config-option-btn" data-option="cpu" data-value="i5">Intel i5 (okay)</button>
+          <button class="config-option-btn" data-option="cpu" data-value="i7">Intel i7 (gut)</button>
+          <button class="config-option-btn" data-option="cpu" data-value="i9">Intel i9 (teuer)</button>
+        </div>
+      </div>
+      
+      <div class="config-section">
+        <label class="config-label">RAM Speicher wählen:</label>
+        <div class="config-options">
+          <button class="config-option-btn" data-option="ram" data-value="8">8 GB (zu wenig)</button>
+          <button class="config-option-btn" data-option="ram" data-value="16">16 GB (Standard)</button>
+          <button class="config-option-btn" data-option="ram" data-value="32">32 GB (Übertrieben)</button>
+          <button class="config-option-btn" data-option="ram" data-value="64">64 GB (Wahnsinn)</button>
+        </div>
+      </div>
+      
+      <div class="config-section">
+        <label class="config-label">Festplattengröße:</label>
+        <div class="config-options">
+          <button class="config-option-btn" data-option="storage" data-value="256">256 GB SSD (knapp)</button>
+          <button class="config-option-btn" data-option="storage" data-value="512">512 GB SSD (reicht)</button>
+          <button class="config-option-btn" data-option="storage" data-value="1024">1 TB SSD (viel)</button>
+          <button class="config-option-btn" data-option="storage" data-value="2048">2 TB SSD (extrem)</button>
+        </div>
+      </div>
+      
+      <div class="config-section">
+        <label class="config-label">Grafikkarte aussuchen:</label>
+        <div class="config-options">
+          <button class="config-option-btn" data-option="gpu" data-value="integrated">Integriert (schwach)</button>
+          <button class="config-option-btn" data-option="gpu" data-value="gtx1650">GTX 1650 (alt)</button>
+          <button class="config-option-btn" data-option="gpu" data-value="rtx3060">RTX 3060 (mittel)</button>
+          <button class="config-option-btn" data-option="gpu" data-value="rtx4090">RTX 4090 (Monster)</button>
+        </div>
+      </div>
+      
+      <div class="config-section">
+        <label class="config-label">Betriebssystem festlegen:</label>
+        <div class="config-options">
+          <button class="config-option-btn" data-option="os" data-value="none">Ohne OS (selbst machen)</button>
+          <button class="config-option-btn" data-option="os" data-value="win10">Windows 10 (veraltet)</button>
+          <button class="config-option-btn" data-option="os" data-value="win11">Windows 11 (aktuell)</button>
+          <button class="config-option-btn" data-option="os" data-value="linux">Linux (für Nerds)</button>
+        </div>
+      </div>
+      
+      <div class="config-summary" id="config-summary" style="display: none;">
+        <p style="color: #888; font-size: 0.9em; margin: 20px 0;">Ausgewählt: <span id="config-selected">Nichts</span></p>
+      </div>
+      
+      <button class="config-confirm-btn" id="config-confirm-btn" disabled>Zur Kasse gehen</button>
+    </div>
+  `;
+  
+  document.body.appendChild(configPopup);
+  
+  // Stop annoying popups during configuration
+  stopRandomPopups();
+  stopSearchPopup();
+  
+  const selectedConfig = {
+    cpu: null,
+    ram: null,
+    storage: null,
+    gpu: null,
+    os: null
+  };
+  
+  // Close Button (rund, oben rechts fixiert) - use querySelector on popup
+  const closeBtn = configPopup.querySelector("#config-close-btn");
+  if (closeBtn) {
+    closeBtn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      configPopup.remove();
+      // Restart popups after closing config
+      startRandomPopups();
+      startSearchPopup();
+    };
+  }
+  
+  // Worst Practice: Nur ein Button pro Kategorie kann angeklickt werden, andere verschwinden
+  const optionBtns = configPopup.querySelectorAll('.config-option-btn');
+  
+  // Add click handlers
+  optionBtns.forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      
+      const option = btn.dataset.option;
+      const value = btn.dataset.value;
+      
+      // Speichere Auswahl
+      selectedConfig[option] = value;
+      
+      // Worst Practice: Alle anderen Buttons dieser Kategorie ausblenden
+      configPopup.querySelectorAll(`[data-option="${option}"]`).forEach(b => {
+        if (b !== btn) {
+          b.style.display = 'none';
+        } else if (b === btn) {
+          b.classList.add('selected');
+          b.disabled = true;
+        }
+      });
+      
+      // Prüfe ob alle Optionen ausgewählt
+      const allSelected = Object.values(selectedConfig).every(v => v !== null);
+      
+      if (allSelected) {
+        const confirmBtn = configPopup.querySelector('#config-confirm-btn');
+        if (confirmBtn) {
+          confirmBtn.disabled = false;
+        }
+        const summary = configPopup.querySelector('#config-summary');
+        if (summary) {
+          summary.style.display = 'block';
+        }
+        const selected = configPopup.querySelector('#config-selected');
+        if (selected) {
+          selected.textContent = 
+            `CPU: ${selectedConfig.cpu}, RAM: ${selectedConfig.ram}GB, Speicher: ${selectedConfig.storage}GB, GPU: ${selectedConfig.gpu}, OS: ${selectedConfig.os}`;
+        }
+      }
+    };
+  });
+  
+  // Bestätigen-Button - use querySelector on popup
+  const confirmBtn = configPopup.querySelector('#config-confirm-btn');
+  if (confirmBtn) {
+    confirmBtn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // All items available, proceed to checkout
+      configPopup.remove();
+      // Restart popups when successfully going to checkout
+      startRandomPopups();
+      startSearchPopup();
+      showScreen("checkout-screen");
+      setupCheckout();
+    };
+  }
+}
+
 // --- ERROR POPUP LOGIK (Worst Practice: wanderndes X, langsames Schließen) ---
 let popupCloseInterval = null;
-function showErrorPopup(message) {
+function showErrorPopup(message, onClose) {
   // Entferne altes Popup falls vorhanden
   const existing = document.getElementById("error-popup");
   if (existing) existing.remove();
@@ -463,7 +653,13 @@ function showErrorPopup(message) {
   closeBtn.onclick = () => {
     clearInterval(popupCloseInterval);
     popup.classList.add("closing");
-    setTimeout(() => popup.remove(), 4000); // 4 Sekunden langsame Schließanimation
+    setTimeout(() => {
+      popup.remove();
+      // Call the callback after popup is fully closed
+      if (onClose) {
+        onClose();
+      }
+    }, 4000); // 4 Sekunden langsame Schließanimation
   };
 }
 
@@ -1029,23 +1225,770 @@ function showLongScrollText() {
 
 function completeCheckout() {
   checkoutCompleted = true;
-  stopRandomPopups();
-  stopSearchPopup();
-  
-  // Stage 1 erfolgreich - berechne Punkte für Shop-Stage
   clearInterval(timerInterval);
+  
+  // Punkte für erste Stage berechnen
   const stageTime = (Date.now() - startTime) / 1000;
   const stagePoints = Math.max(0, Math.round(1000 - (stageTime * 8.33)));
   totalScore += stagePoints;
   
   console.log(`Stage 1 (Shop) abgeschlossen in ${stageTime.toFixed(2)}s - Punkte: ${stagePoints}`);
   
-  // Direkt zur nächsten Stage ohne Popup
-  if (currentStage < stages.length - 1) {
-    currentStage++;
-    showScreen("stages");
-    startStage(currentStage);
+  // Cleanup
+  stopRandomPopups();
+  stopSearchPopup();
+  
+  // Zur nächsten Stage
+  nextStage();
+}
+
+// --- SHITSTAGRAM LOGIK (STAGE 2) ---
+window.shitStagramShared = false;
+
+const shitStagramUsers = [
+  { username: "trafish_cod", displayName: "Trafish cod", verified: true, followers: 2847, following: 892, posts: 347 },
+  { username: "dieter_official", displayName: "Dieter", verified: false, followers: 156, following: 423, posts: 89 },
+  { username: "trafish_god", displayName: "Trafish god", verified: false, followers: 1203, following: 567, posts: 234 },
+  { username: "trash_fish_cod", displayName: "Trash fish cod", verified: false, followers: 891, following: 234, posts: 156 },
+  { username: "gaming_king_2024", displayName: "Gaming King", verified: true, followers: 45678, following: 234, posts: 1234 },
+  { username: "random_user_42", displayName: "Random User", verified: false, followers: 432, following: 567, posts: 123 }
+];
+
+const shitStagramPosts = [
+  {
+    id: 1,
+    username: "trafish_cod",
+    userDisplay: "Trafish cod",
+    verified: true,
+    image: "img/latestpost.png",
+    likes: 1247,
+    caption: "Just caught the biggest fish ever! 🎣 #fishing #nature #blessed",
+    timestamp: "2 Std.",
+    comments: [
+      { username: "gaming_king_2024", text: "Wow das ist ja riesig! 😱" },
+      { username: "dieter_official", text: "Respekt @trafish_cod! Wie lange hat das gedauert?" },
+      { username: "trash_fish_cod", text: "Fake... das ist Photoshop 🙄" },
+      { username: "trafish_god", text: "LEGEND! 🔥" }
+    ]
+  },
+  {
+    id: 2,
+    username: "trafish_cod",
+    userDisplay: "Trafish cod",
+    verified: true,
+    image: "img/Post1.png",
+    likes: 892,
+    caption: "Sunset at the lake 🌅 Perfect evening for fishing",
+    timestamp: "1 Tag",
+    comments: [
+      { username: "random_user_42", text: "So schön! 😍" },
+      { username: "gaming_king_2024", text: "Gönn dir @trafish_cod" }
+    ]
+  },
+  {
+    id: 3,
+    username: "trafish_cod",
+    userDisplay: "Trafish cod",
+    verified: true,
+    image: "img/Post2.png",
+    likes: 1456,
+    caption: "New fishing gear arrived! 🎣 Can't wait to try it out",
+    timestamp: "2 Tage",
+    comments: [
+      { username: "dieter_official", text: "Welche Marke ist das?" },
+      { username: "trafish_god", text: "Ich hab die gleiche! Mega gut @trafish_cod" },
+      { username: "trash_fish_cod", text: "Bisschen teuer oder? 💸" }
+    ]
+  },
+  {
+    id: 4,
+    username: "trafish_cod",
+    userDisplay: "Trafish cod",
+    verified: true,
+    image: "img/Post3.png",
+    likes: 2341,
+    caption: "Epic catch of the day! 🐟 This one's a keeper",
+    timestamp: "3 Tage",
+    comments: [
+      { username: "gaming_king_2024", text: "MASSIVE! 🤯" },
+      { username: "random_user_42", text: "Wie viel kg?" },
+      { username: "dieter_official", text: "Glückwunsch Bro! 💪" }
+    ]
+  },
+  {
+    id: 5,
+    username: "trafish_cod",
+    userDisplay: "Trafish cod",
+    verified: true,
+    image: "img/Post4.png",
+    likes: 1789,
+    caption: "Morning fog over the water ☁️ Best time to fish",
+    timestamp: "4 Tage",
+    comments: [
+      { username: "trafish_god", text: "Traumhaft! 😌" },
+      { username: "trash_fish_cod", text: "Zu früh für mich lol" }
+    ]
+  },
+  {
+    id: 6,
+    username: "trafish_cod",
+    userDisplay: "Trafish cod",
+    verified: true,
+    image: "img/Post5.png",
+    likes: 3201,
+    caption: "Feeling blessed today 🙏 Nature is amazing",
+    timestamp: "5 Tage",
+    comments: [
+      { username: "gaming_king_2024", text: "Facts! 🙌" },
+      { username: "dieter_official", text: "Wo ist das @trafish_cod?" },
+      { username: "random_user_42", text: "Wunderschön!" }
+    ]
+  },
+  {
+    id: 7,
+    username: "trafish_cod",
+    userDisplay: "Trafish cod",
+    verified: true,
+    image: "img/Post6.png",
+    likes: 987,
+    caption: "Throwback to last summer ☀️ Good times at the lake",
+    timestamp: "6 Tage",
+    comments: [
+      { username: "trash_fish_cod", text: "Nostalgie pur 😢" },
+      { username: "trafish_god", text: "War ne geile Zeit!" }
+    ]
+  },
+  {
+    id: 8,
+    username: "trafish_cod",
+    userDisplay: "Trafish cod",
+    verified: true,
+    image: "img/Post7.png",
+    likes: 4562,
+    caption: "Can't believe I caught this! 😱 Biggest one yet",
+    timestamp: "1 Woche",
+    comments: [
+      { username: "gaming_king_2024", text: "INSANE catch @trafish_cod! 🔥" },
+      { username: "dieter_official", text: "Weltrekord? 😂" },
+      { username: "random_user_42", text: "Das ist unfassbar groß!" }
+    ]
+  },
+  {
+    id: 9,
+    username: "trafish_cod",
+    userDisplay: "Trafish cod",
+    verified: true,
+    image: "img/Post8.png",
+    likes: 1123,
+    caption: "Vibing with nature 🌿 Peaceful day by the water",
+    timestamp: "1 Woche",
+    comments: [
+      { username: "trafish_god", text: "Entspannung pur! ✨" },
+      { username: "trash_fish_cod", text: "Gönnung @trafish_cod" }
+    ]
+  },
+  {
+    id: 10,
+    username: "gaming_king_2024",
+    userDisplay: "Gaming King",
+    verified: true,
+    image: "img/home1.png",
+    likes: 5634,
+    caption: "New gaming setup is INSANE! 🎮💜 RGB on max",
+    timestamp: "3 Std.",
+    comments: [
+      { username: "trafish_cod", text: "Sick setup! 🔥" },
+      { username: "random_user_42", text: "Wie viel hat das gekostet? 💰" },
+      { username: "dieter_official", text: "Ich brauch auch so eins @gaming_king_2024" }
+    ]
+  },
+  {
+    id: 11,
+    username: "trafish_god",
+    userDisplay: "Trafish god",
+    verified: false,
+    image: "img/home2.png",
+    likes: 456,
+    caption: "Sunset vibes ✨ Golden hour hitting different",
+    timestamp: "5 Std.",
+    comments: [
+      { username: "trash_fish_cod", text: "Aesthetic! 📸" },
+      { username: "gaming_king_2024", text: "Beautiful shot!" }
+    ]
+  },
+  {
+    id: 12,
+    username: "dieter_official",
+    userDisplay: "Dieter",
+    verified: false,
+    image: "img/home3.png",
+    likes: 234,
+    caption: "Monday mood 😎 Let's get this week started",
+    timestamp: "7 Std.",
+    comments: [
+      { username: "trafish_cod", text: "Let's go! 💪" },
+      { username: "random_user_42", text: "Motivation pur @dieter_official" }
+    ]
+  },
+  {
+    id: 13,
+    username: "trash_fish_cod",
+    userDisplay: "Trash fish cod",
+    verified: false,
+    image: "img/home4.png",
+    likes: 678,
+    caption: "Weekend adventure! 🏞️ Exploring new spots",
+    timestamp: "9 Std.",
+    comments: [
+      { username: "trafish_god", text: "Wo ist das? Sieht cool aus!" },
+      { username: "gaming_king_2024", text: "Adventure time! 🗺️" },
+      { username: "dieter_official", text: "Nimm mich mit @trash_fish_cod 😂" }
+    ]
+  },
+  {
+    id: 14,
+    username: "random_user_42",
+    userDisplay: "Random User",
+    verified: false,
+    image: "img/home5.png",
+    likes: 321,
+    caption: "Just chilling 🍻 Weekend vibes on point",
+    timestamp: "12 Std.",
+    comments: [
+      { username: "trash_fish_cod", text: "Prost! 🍺" },
+      { username: "trafish_cod", text: "Gönn dir!" }
+    ]
+  },
+  {
+    id: 15,
+    username: "gaming_king_2024",
+    userDisplay: "Gaming King",
+    verified: true,
+    image: "img/home6.png",
+    likes: 4123,
+    caption: "Victory royale! 🏆 First place baby!",
+    timestamp: "1 Tag",
+    comments: [
+      { username: "dieter_official", text: "GG! 🎮" },
+      { username: "trafish_cod", text: "Beast mode @gaming_king_2024! 💯" },
+      { username: "random_user_42", text: "Carry me next time? 😅" }
+    ]
   }
+];
+
+function initShitstagram() {
+  const feed = document.getElementById("shitstagram-feed");
+  const searchBtn = document.getElementById("shitstagram-search-btn");
+  
+  // Render Feed
+  renderShitstagramFeed();
+  
+  // Search Button Click
+  searchBtn.onclick = () => {
+    showShitstagramSearch();
+  };
+}
+
+function renderShitstagramFeed() {
+  const feed = document.getElementById("shitstagram-feed");
+  // Worst Practice: Trafish cod Post ist nicht im Feed sichtbar - muss gesucht werden
+  const visiblePosts = shitStagramPosts.filter(post => post.username !== "trafish_cod");
+  feed.innerHTML = visiblePosts.map(post => {
+    const avatarContent = post.username === "trafish_cod" 
+      ? `<img src="img/trafish.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">` 
+      : post.userDisplay[0];
+    return `
+    <div class="shitstagram-post" data-post-id="${post.id}">
+      <div class="shitstagram-post-header">
+        <div class="shitstagram-post-user">
+          <div class="shitstagram-avatar">${avatarContent}</div>
+          <div class="shitstagram-user-info">
+            <div class="shitstagram-username">
+              ${post.userDisplay}
+              ${post.verified ? '<span class="shitstagram-verified">✓</span>' : ''}
+            </div>
+            <div class="shitstagram-timestamp">${post.timestamp}</div>
+          </div>
+        </div>
+        <button class="shitstagram-post-menu">⋯</button>
+      </div>
+      
+      <div class="shitstagram-post-image">
+        <img src="${post.image}" alt="Post">
+      </div>
+      
+      <div class="shitstagram-post-actions">
+        <button class="shitstagram-action-btn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+        <button class="shitstagram-action-btn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+        <button class="shitstagram-action-btn shitstagram-share-btn" data-post-id="${post.id}" data-username="${post.username}">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 12L9 17L9 13L20 13L20 11L9 11L9 7L4 12Z" fill="currentColor" transform="rotate(90 12 12)"/>
+          </svg>
+        </button>
+        <button class="shitstagram-action-btn shitstagram-bookmark">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 3H7C5.9 3 5 3.9 5 5V21L12 18L19 21V5C19 3.9 18.1 3 17 3Z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="shitstagram-post-info">
+        <div class="shitstagram-likes">${post.likes.toLocaleString()} Likes</div>
+        <div class="shitstagram-caption">
+          <strong>${post.userDisplay}</strong> ${post.caption}
+        </div>
+        <div class="shitstagram-comments">Alle ${post.comments} Kommentare ansehen</div>
+      </div>
+    </div>
+  `;
+  }).join('');
+  
+  // Add share button listeners
+  document.querySelectorAll('.shitstagram-share-btn').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const postId = btn.dataset.postId;
+      const username = btn.dataset.username;
+      showShitstagramShareDialog(postId, username);
+    };
+  });
+  
+  // Add like button listeners (Worst Practice: Zeigt nerviges Herzen-Overlay)
+  document.querySelectorAll('.shitstagram-action-btn').forEach((btn, index) => {
+    // Erster Button ist der Like-Button
+    if (index % 4 === 0) {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        showHeartsOverlay();
+      };
+    }
+  });
+}
+
+function showShitstagramSearch() {
+  const popup = document.createElement("div");
+  popup.className = "shitstagram-search-popup";
+  popup.innerHTML = `
+    <div class="shitstagram-search-content">
+      <div class="shitstagram-search-header">
+        <input type="text" id="shitstagram-search-input" placeholder="Suchen..." autofocus>
+        <button class="shitstagram-close-btn" id="shitstagram-search-close">✕</button>
+      </div>
+      <div class="shitstagram-search-results" id="shitstagram-search-results">
+        <div class="shitstagram-search-placeholder">Suche nach Benutzern...</div>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(popup);
+  
+  const input = document.getElementById("shitstagram-search-input");
+  const results = document.getElementById("shitstagram-search-results");
+  const closeBtn = document.getElementById("shitstagram-search-close");
+  
+  closeBtn.onclick = () => popup.remove();
+  
+  input.oninput = (e) => {
+    const query = e.target.value.toLowerCase();
+    if (query.length === 0) {
+      results.innerHTML = '<div class="shitstagram-search-placeholder">Suche nach Benutzern...</div>';
+      return;
+    }
+    
+    const filtered = shitStagramUsers.filter(u => 
+      u.username.toLowerCase().includes(query) || 
+      u.displayName.toLowerCase().includes(query)
+    );
+    
+    if (filtered.length === 0) {
+      results.innerHTML = '<div class="shitstagram-search-placeholder">Keine Ergebnisse</div>';
+      return;
+    }
+    
+    results.innerHTML = filtered.map(user => {
+      const avatarContent = user.username === "trafish_cod" 
+        ? `<img src="img/trafish.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">` 
+        : user.displayName[0];
+      return `
+      <div class="shitstagram-search-result" data-username="${user.username}">
+        <div class="shitstagram-avatar">${avatarContent}</div>
+        <div class="shitstagram-search-user-info">
+          <div class="shitstagram-search-username">
+            ${user.displayName}
+            ${user.verified ? '<span class="shitstagram-verified">✓</span>' : ''}
+          </div>
+          <div class="shitstagram-search-meta">${user.followers.toLocaleString()} Follower</div>
+        </div>
+      </div>
+      `;
+    }).join('');
+    
+    // Add click listeners to results
+    document.querySelectorAll('.shitstagram-search-result').forEach(result => {
+      result.onclick = () => {
+        const username = result.dataset.username;
+        popup.remove();
+        showShitstagramProfile(username);
+      };
+    });
+  };
+}
+
+function showShitstagramProfile(username) {
+  const user = shitStagramUsers.find(u => u.username === username);
+  if (!user) return;
+  
+  const userPosts = shitStagramPosts.filter(p => p.username === username);
+  
+  const avatarContent = user.username === "trafish_cod" 
+    ? `<img src="img/trafish.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">` 
+    : user.displayName[0];
+  
+  const popup = document.createElement("div");
+  popup.className = "shitstagram-profile-popup";
+  popup.innerHTML = `
+    <div class="shitstagram-profile-content">
+      <div class="shitstagram-profile-header">
+        <button class="shitstagram-back-btn" id="shitstagram-profile-back">←</button>
+        <div class="shitstagram-profile-username">${user.username}</div>
+      </div>
+      
+      <div class="shitstagram-profile-info">
+        <div class="shitstagram-profile-avatar">${avatarContent}</div>
+        <div class="shitstagram-profile-stats">
+          <div class="shitstagram-stat">
+            <strong>${user.posts}</strong>
+            <span>Beiträge</span>
+          </div>
+          <div class="shitstagram-stat">
+            <strong>${user.followers.toLocaleString()}</strong>
+            <span>Follower</span>
+          </div>
+          <div class="shitstagram-stat">
+            <strong>${user.following}</strong>
+            <span>Folge ich</span>
+          </div>
+        </div>
+        <div class="shitstagram-profile-name">
+          ${user.displayName}
+          ${user.verified ? '<span class="shitstagram-verified">✓</span>' : ''}
+        </div>
+      </div>
+      
+      <div class="shitstagram-profile-posts">
+        ${userPosts.map(post => `
+          <div class="shitstagram-profile-post" data-post-id="${post.id}">
+            <img src="${post.image}" alt="Post">
+            <div class="shitstagram-profile-post-overlay">
+              <span>❤ ${post.likes}</span>
+              <span>💬 ${post.comments.length}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(popup);
+  
+  document.getElementById("shitstagram-profile-back").onclick = () => popup.remove();
+  
+  // Add click listeners to profile posts
+  document.querySelectorAll('.shitstagram-profile-post').forEach(postEl => {
+    postEl.onclick = () => {
+      const postId = postEl.dataset.postId;
+      popup.remove();
+      showShitstagramPostDetail(postId);
+    };
+  });
+}
+
+function showShitstagramPostDetail(postId) {
+  const post = shitStagramPosts.find(p => p.id == postId);
+  if (!post) return;
+  
+  const avatarContent = post.username === "trafish_cod" 
+    ? `<img src="img/trafish.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">` 
+    : post.userDisplay[0];
+  
+  const popup = document.createElement("div");
+  popup.className = "shitstagram-post-detail-popup";
+  popup.innerHTML = `
+    <div class="shitstagram-post-detail-content">
+      <button class="shitstagram-close-btn" id="shitstagram-post-detail-close">✕</button>
+      
+      <div class="shitstagram-post-detail">
+        <div class="shitstagram-post-detail-image">
+          <img src="${post.image}" alt="Post">
+        </div>
+        
+        <div class="shitstagram-post-detail-sidebar">
+          <div class="shitstagram-post-header">
+            <div class="shitstagram-post-user">
+              <div class="shitstagram-avatar">${avatarContent}</div>
+              <div class="shitstagram-user-info">
+                <div class="shitstagram-username">
+                  ${post.userDisplay}
+                  ${post.verified ? '<span class="shitstagram-verified">✓</span>' : ''}
+                </div>
+              </div>
+            </div>
+            <button class="shitstagram-post-menu">⋯</button>
+          </div>
+          
+          <div class="shitstagram-post-caption-section">
+            <div class="shitstagram-avatar">${avatarContent}</div>
+            <div>
+              <strong>${post.userDisplay}</strong> ${post.caption}
+            </div>
+          </div>
+          
+          <div class="shitstagram-comments-section">
+            ${post.comments.map(comment => {
+              const commentAvatarContent = comment.username === "trafish_cod" 
+                ? `<img src="img/trafish.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">` 
+                : comment.username.charAt(0).toUpperCase();
+              
+              // Replace @mentions with styled spans
+              const styledText = comment.text.replace(/@(\w+)/g, '<span class="shitstagram-mention">@$1</span>');
+              
+              return `
+                <div class="shitstagram-comment">
+                  <div class="shitstagram-avatar">${commentAvatarContent}</div>
+                  <div class="shitstagram-comment-content">
+                    <strong>${comment.username}</strong> ${styledText}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+          
+          <div class="shitstagram-post-detail-actions">
+            <button class="shitstagram-action-btn shitstagram-detail-like-btn">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </button>
+            <button class="shitstagram-action-btn">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </button>
+            <button class="shitstagram-action-btn shitstagram-share-btn" data-post-id="${post.id}" data-username="${post.username}">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 12L9 17L9 13L20 13L20 11L9 11L9 7L4 12Z" fill="currentColor" transform="rotate(90 12 12)"/>
+              </svg>
+            </button>
+          </div>
+          
+          <div class="shitstagram-likes">${post.likes.toLocaleString()} Likes</div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(popup);
+  
+  document.getElementById("shitstagram-post-detail-close").onclick = () => popup.remove();
+  
+  // Like button handler
+  const likeBtn = popup.querySelector('.shitstagram-detail-like-btn');
+  if (likeBtn) {
+    likeBtn.onclick = (e) => {
+      e.stopPropagation();
+      showHeartsOverlay();
+    };
+  }
+  
+  popup.querySelector('.shitstagram-share-btn').onclick = (e) => {
+    e.stopPropagation();
+    showShitstagramShareDialog(post.id, post.username);
+  };
+}
+
+// Herzen-Overlay beim Liken (Worst Practice: Blockiert Navigation)
+function showHeartsOverlay() {
+  const overlay = document.createElement("div");
+  overlay.className = "hearts-overlay";
+  document.body.appendChild(overlay);
+  
+  // Erzeuge 50 Herzen über 3 Sekunden
+  let heartCount = 0;
+  const heartInterval = setInterval(() => {
+    if (heartCount >= 50) {
+      clearInterval(heartInterval);
+      return;
+    }
+    
+    const heart = document.createElement("div");
+    heart.className = "floating-heart";
+    heart.textContent = "💜";
+    heart.style.left = Math.random() * 100 + "%";
+    heart.style.fontSize = (30 + Math.random() * 40) + "px";
+    heart.style.animationDelay = (Math.random() * 0.5) + "s";
+    
+    overlay.appendChild(heart);
+    heartCount++;
+  }, 60);
+  
+  // Overlay bleibt für 5 Sekunden (lange genug um nervig zu sein)
+  setTimeout(() => {
+    overlay.classList.add("hiding");
+    setTimeout(() => {
+      overlay.remove();
+    }, 500);
+  }, 5000);
+}
+
+// Success Overlay für Stage-Abschluss
+function showSuccessOverlay(callback) {
+  const overlay = document.createElement("div");
+  overlay.className = "success-overlay";
+  overlay.innerHTML = `
+    <div class="success-content">
+      <div class="success-checkmark">
+        <div class="success-circle">
+          <div class="success-check">
+            <svg viewBox="0 0 52 52">
+              <polyline points="14,26 22,34 38,18" />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <p class="success-text">Geschafft!</p>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+  
+  // Nach 1.5 Sekunden ausblenden und callback ausführen
+  setTimeout(() => {
+    overlay.classList.add("hiding");
+    setTimeout(() => {
+      overlay.remove();
+      if (callback) callback();
+    }, 300);
+  }, 1500);
+}
+
+function showShitstagramShareDialog(postId, postUsername) {
+  const popup = document.createElement("div");
+  popup.className = "shitstagram-share-popup";
+  popup.innerHTML = `
+    <div class="shitstagram-share-content">
+      <div class="shitstagram-share-header">
+        <h3>Senden an</h3>
+        <button class="shitstagram-close-btn" id="shitstagram-share-close">✕</button>
+      </div>
+      
+      <div class="shitstagram-share-search">
+        <input type="text" placeholder="Suchen..." id="shitstagram-share-search-input">
+      </div>
+      
+      <div class="shitstagram-share-users" id="shitstagram-share-users">
+        ${shitStagramUsers.filter(u => u.username !== postUsername).map(user => {
+          const avatarContent = user.username === "trafish_cod" 
+            ? `<img src="img/trafish.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">` 
+            : user.displayName[0];
+          return `
+          <div class="shitstagram-share-user" data-username="${user.username}">
+            <div class="shitstagram-avatar">${avatarContent}</div>
+            <div class="shitstagram-share-user-name">${user.displayName}</div>
+            <button class="shitstagram-send-btn" data-username="${user.username}">Senden</button>
+          </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(popup);
+  
+  document.getElementById("shitstagram-share-close").onclick = () => popup.remove();
+  
+  // Send button listeners
+  document.querySelectorAll('.shitstagram-send-btn').forEach(btn => {
+    btn.onclick = () => {
+      const targetUser = btn.dataset.username;
+      
+      // Check if correct: Post von "trafish_cod" an "dieter_official"
+      if (postUsername === "trafish_cod" && targetUser === "dieter_official") {
+        window.shitStagramShared = true;
+        popup.remove();
+        
+        // Zeige Success-Overlay
+        showSuccessOverlay(() => {
+          // Stage abschließen und zur nächsten wechseln
+          clearInterval(timerInterval);
+          const stageTime = (Date.now() - startTime) / 1000;
+          const stagePoints = Math.max(0, Math.round(1000 - (stageTime * 8.33)));
+          totalScore += stagePoints;
+          
+          console.log(`Stage ${currentStage + 1} abgeschlossen in ${stageTime.toFixed(2)}s - Punkte: ${stagePoints}`);
+          
+          // Zur nächsten Stage
+          if (currentStage < stages.length - 1) {
+            currentStage++;
+            startStage(currentStage);
+          } else {
+            document.getElementById("final-score").textContent = totalScore;
+            showScreen("end-screen");
+          }
+        });
+      } else {
+        // Falscher Post oder Empfänger - erlaubt, aber zeigt Fehler
+        popup.remove();
+        showErrorPopup("Das war nicht der richtige Post oder Empfänger!");
+      }
+    };
+  });
+  
+  // Search functionality
+  const searchInput = document.getElementById("shitstagram-share-search-input");
+  searchInput.oninput = (e) => {
+    const query = e.target.value.toLowerCase();
+    document.querySelectorAll('.shitstagram-share-user').forEach(userEl => {
+      const username = userEl.dataset.username.toLowerCase();
+      const displayName = userEl.querySelector('.shitstagram-share-user-name').textContent.toLowerCase();
+      if (username.includes(query) || displayName.includes(query)) {
+        userEl.style.display = 'flex';
+      } else {
+        userEl.style.display = 'none';
+      }
+    });
+  };
+}
+
+function completeCheckout() {
+  checkoutCompleted = true;
+  stopRandomPopups();
+  stopSearchPopup();
+  
+  // Zeige Success-Overlay
+  showSuccessOverlay(() => {
+    // Stage 1 erfolgreich - berechne Punkte für Shop-Stage
+    clearInterval(timerInterval);
+    const stageTime = (Date.now() - startTime) / 1000;
+    const stagePoints = Math.max(0, Math.round(1000 - (stageTime * 8.33)));
+    totalScore += stagePoints;
+    
+    console.log(`Stage 1 (Shop) abgeschlossen in ${stageTime.toFixed(2)}s - Punkte: ${stagePoints}`);
+    
+    // Direkt zur nächsten Stage
+    if (currentStage < stages.length - 1) {
+      currentStage++;
+      showScreen("stages");
+      startStage(currentStage);
+    }
+  });
 }
 
 document.getElementById("submit-btn").onclick = () => {
@@ -1090,6 +2033,29 @@ document.getElementById("restart-btn").onclick = () => {
   readyBtn.classList.add("ready"); // Startet mit "ready" Farbe obwohl nicht bereit
   readyBtn.classList.remove("notready");
   clickWord.classList.add("active-link");
+};
+
+// === TEST FUNKTION - Im Browser Console verwenden ===
+// Tippe in der Browser Console: testStage(0) für Stage 1, testStage(1) für Stage 2, etc.
+window.testStage = function(stageIndex) {
+  // Cleanup
+  if (timerInterval) clearInterval(timerInterval);
+  stopRandomPopups();
+  stopSearchPopup();
+  
+  const allPopups = document.querySelectorAll(".error-popup, .newsletter-popup, .purchase-notification");
+  allPopups.forEach(p => p.remove());
+  
+  // Wenn Stage 1+ getestet wird, markiere Checkout als completed
+  if (stageIndex > 0) {
+    checkoutCompleted = true;
+  }
+  
+  // Zeige Stages Screen und starte gewünschte Stage
+  showScreen("stages");
+  startStage(stageIndex);
+  
+  console.log(`✅ Test-Modus: Stage ${stageIndex + 1} geladen`);
 };
 
 showScreen("start-screen");
