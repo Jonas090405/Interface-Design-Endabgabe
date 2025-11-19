@@ -1283,7 +1283,8 @@ select:focus {
 }
 
 /* Microinteraction: Like Button Click Feedback */
-.shitstagram-like-btn:active {
+.shitstagram-like-btn:active,
+.shitstagram-detail-like-btn:active {
   animation: likeButtonPulse 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
@@ -1305,7 +1306,8 @@ select:focus {
   }
 }
 
-.shitstagram-like-btn.liked svg {
+.shitstagram-like-btn.liked svg,
+.shitstagram-detail-like-btn.liked svg {
   filter: drop-shadow(0 0 8px rgba(178, 12, 233, 0.4));
   animation: heartBeat 0.3s ease-in-out;
 }
@@ -1316,6 +1318,35 @@ select:focus {
   }
   50% {
     transform: scale(1.3);
+  }
+}
+
+/* Smooth transition for like/unlike */
+.shitstagram-like-btn svg path,
+.shitstagram-detail-like-btn svg path {
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}
+
+.shitstagram-like-btn svg,
+.shitstagram-detail-like-btn svg {
+  transition: filter 0.2s ease;
+}
+
+/* Unlike animation */
+.shitstagram-like-btn:not(.liked):active,
+.shitstagram-detail-like-btn:not(.liked):active {
+  animation: unlikeButtonShrink 0.3s ease;
+}
+
+@keyframes unlikeButtonShrink {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 

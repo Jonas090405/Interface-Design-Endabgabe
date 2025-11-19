@@ -2397,43 +2397,44 @@ function renderShitstagramFeed() {
       const isLiked = likeBtn.dataset.liked === 'true';
       
       if (!isLiked) {
-        // Speichere Like-Status
+        // Like the post
         likedPosts.add(postId);
-        
-        // Like den Post
         likeBtn.dataset.liked = 'true';
         likeBtn.classList.add('liked');
         
-        // Füge Gradient zum SVG hinzu
+        // Füge Gradient zum SVG hinzu oder aktualisiere path
         const svg = likeBtn.querySelector('svg');
-        if (svg && !svg.querySelector('defs')) {
-          const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-          const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-          gradient.setAttribute('id', `likeGradient-${postId}`);
-          gradient.setAttribute('x1', '0%');
-          gradient.setAttribute('y1', '0%');
-          gradient.setAttribute('x2', '100%');
-          gradient.setAttribute('y2', '100%');
+        if (svg) {
+          // Create defs if not exists
+          if (!svg.querySelector('defs')) {
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+            gradient.setAttribute('id', `likeGradient-${postId}`);
+            gradient.setAttribute('x1', '0%');
+            gradient.setAttribute('y1', '0%');
+            gradient.setAttribute('x2', '100%');
+            gradient.setAttribute('y2', '100%');
+            
+            const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stop1.setAttribute('offset', '0%');
+            stop1.setAttribute('style', 'stop-color:#B20CE9;stop-opacity:1');
+            
+            const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stop2.setAttribute('offset', '50%');
+            stop2.setAttribute('style', 'stop-color:#7d3ba8;stop-opacity:1');
+            
+            const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stop3.setAttribute('offset', '100%');
+            stop3.setAttribute('style', 'stop-color:#5a2a7a;stop-opacity:1');
+            
+            gradient.appendChild(stop1);
+            gradient.appendChild(stop2);
+            gradient.appendChild(stop3);
+            defs.appendChild(gradient);
+            svg.insertBefore(defs, svg.firstChild);
+          }
           
-          const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-          stop1.setAttribute('offset', '0%');
-          stop1.setAttribute('style', 'stop-color:#B20CE9;stop-opacity:1');
-          
-          const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-          stop2.setAttribute('offset', '50%');
-          stop2.setAttribute('style', 'stop-color:#7d3ba8;stop-opacity:1');
-          
-          const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-          stop3.setAttribute('offset', '100%');
-          stop3.setAttribute('style', 'stop-color:#5a2a7a;stop-opacity:1');
-          
-          gradient.appendChild(stop1);
-          gradient.appendChild(stop2);
-          gradient.appendChild(stop3);
-          defs.appendChild(gradient);
-          svg.insertBefore(defs, svg.firstChild);
-          
-          // Update path to use gradient
+          // Always update path to use gradient
           const path = svg.querySelector('path');
           if (path) {
             path.setAttribute('fill', `url(#likeGradient-${postId})`);
@@ -2448,8 +2449,28 @@ function renderShitstagramFeed() {
           countEl.textContent = (currentCount + 1).toLocaleString();
         }
         
-        // Zeige Herzen-Overlay (Worst Practice)
+        // Zeige Herzen-Overlay
         showHeartsOverlay();
+      } else {
+        // Unlike the post
+        likedPosts.delete(postId);
+        likeBtn.dataset.liked = 'false';
+        likeBtn.classList.remove('liked');
+        
+        // Remove gradient
+        const svg = likeBtn.querySelector('svg');
+        const path = svg.querySelector('path');
+        if (path) {
+          path.setAttribute('fill', 'none');
+          path.setAttribute('stroke', 'currentColor');
+        }
+        
+        // Reduziere Like-Count
+        const countEl = document.querySelector(`.shitstagram-likes-count[data-post-id="${postId}"]`);
+        if (countEl) {
+          const currentCount = parseInt(countEl.textContent.replace(/\./g, '').replace(/,/g, ''));
+          countEl.textContent = (currentCount - 1).toLocaleString();
+        }
       }
     };
   });
@@ -3182,10 +3203,199 @@ function showShitstagramPostDetail(postId) {
   
   // Like button handler
   const likeBtn = popup.querySelector('.shitstagram-detail-like-btn');
+  const isLiked = likedPosts.has(post.id);
+  
+  // Set initial state
+  if (isLiked) {
+    likeBtn.classList.add('liked');
+    likeBtn.dataset.liked = 'true';
+    
+    // Add gradient to SVG
+    const svg = likeBtn.querySelector('svg');
+    if (svg && !svg.querySelector('defs')) {
+      const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+      const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+      gradient.setAttribute('id', `likeGradient-detail-${post.id}`);
+      gradient.setAttribute('x1', '0%');
+      gradient.setAttribute('y1', '0%');
+      gradient.setAttribute('x2', '100%');
+      gradient.setAttribute('y2', '100%');
+      
+      const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+      stop1.setAttribute('offset', '0%');
+      stop1.setAttribute('style', 'stop-color:#B20CE9;stop-opacity:1');
+      
+      const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+      stop2.setAttribute('offset', '50%');
+      stop2.setAttribute('style', 'stop-color:#7d3ba8;stop-opacity:1');
+      
+      const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+      stop3.setAttribute('offset', '100%');
+      stop3.setAttribute('style', 'stop-color:#5a2a7a;stop-opacity:1');
+      
+      gradient.appendChild(stop1);
+      gradient.appendChild(stop2);
+      gradient.appendChild(stop3);
+      defs.appendChild(gradient);
+      svg.insertBefore(defs, svg.firstChild);
+      
+      const path = svg.querySelector('path');
+      if (path) {
+        path.setAttribute('fill', `url(#likeGradient-detail-${post.id})`);
+        path.setAttribute('stroke', `url(#likeGradient-detail-${post.id})`);
+      }
+    }
+  }
+  
   if (likeBtn) {
     likeBtn.onclick = (e) => {
       e.stopPropagation();
-      showHeartsOverlay();
+      const currentlyLiked = likeBtn.dataset.liked === 'true';
+      
+      if (!currentlyLiked) {
+        // Like the post
+        likedPosts.add(post.id);
+        likeBtn.dataset.liked = 'true';
+        likeBtn.classList.add('liked');
+        
+        // Add gradient to SVG or update path
+        const svg = likeBtn.querySelector('svg');
+        if (svg) {
+          // Create defs if not exists
+          if (!svg.querySelector('defs')) {
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+            gradient.setAttribute('id', `likeGradient-detail-${post.id}`);
+            gradient.setAttribute('x1', '0%');
+            gradient.setAttribute('y1', '0%');
+            gradient.setAttribute('x2', '100%');
+            gradient.setAttribute('y2', '100%');
+            
+            const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stop1.setAttribute('offset', '0%');
+            stop1.setAttribute('style', 'stop-color:#B20CE9;stop-opacity:1');
+            
+            const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stop2.setAttribute('offset', '50%');
+            stop2.setAttribute('style', 'stop-color:#7d3ba8;stop-opacity:1');
+            
+            const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stop3.setAttribute('offset', '100%');
+            stop3.setAttribute('style', 'stop-color:#5a2a7a;stop-opacity:1');
+            
+            gradient.appendChild(stop1);
+            gradient.appendChild(stop2);
+            gradient.appendChild(stop3);
+            defs.appendChild(gradient);
+            svg.insertBefore(defs, svg.firstChild);
+          }
+          
+          // Always update path to use gradient
+          const path = svg.querySelector('path');
+          if (path) {
+            path.setAttribute('fill', `url(#likeGradient-detail-${post.id})`);
+            path.setAttribute('stroke', `url(#likeGradient-detail-${post.id})`);
+          }
+        }
+        
+        // Update count
+        const countEl = popup.querySelector('.shitstagram-count');
+        if (countEl) {
+          const currentCount = parseInt(countEl.textContent.replace(/\./g, '').replace(/,/g, ''));
+          countEl.textContent = (currentCount + 1).toLocaleString();
+        }
+        
+        // Update all feed instances
+        const feedCountEl = document.querySelector(`.shitstagram-likes-count[data-post-id="${post.id}"]`);
+        if (feedCountEl) {
+          const currentCount = parseInt(feedCountEl.textContent.replace(/\./g, '').replace(/,/g, ''));
+          feedCountEl.textContent = (currentCount + 1).toLocaleString();
+        }
+        
+        // Update feed like button visual state
+        const feedLikeBtn = document.querySelector(`.shitstagram-like-btn[data-post-id="${post.id}"]`);
+        if (feedLikeBtn) {
+          feedLikeBtn.dataset.liked = 'true';
+          feedLikeBtn.classList.add('liked');
+          const feedSvg = feedLikeBtn.querySelector('svg');
+          if (feedSvg) {
+            if (!feedSvg.querySelector('defs')) {
+              const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+              const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+              gradient.setAttribute('id', `likeGradient-${post.id}`);
+              gradient.setAttribute('x1', '0%');
+              gradient.setAttribute('y1', '0%');
+              gradient.setAttribute('x2', '100%');
+              gradient.setAttribute('y2', '100%');
+              
+              const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+              stop1.setAttribute('offset', '0%');
+              stop1.setAttribute('style', 'stop-color:#B20CE9;stop-opacity:1');
+              
+              const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+              stop2.setAttribute('offset', '50%');
+              stop2.setAttribute('style', 'stop-color:#7d3ba8;stop-opacity:1');
+              
+              const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+              stop3.setAttribute('offset', '100%');
+              stop3.setAttribute('style', 'stop-color:#5a2a7a;stop-opacity:1');
+              
+              gradient.appendChild(stop1);
+              gradient.appendChild(stop2);
+              gradient.appendChild(stop3);
+              defs.appendChild(gradient);
+              feedSvg.insertBefore(defs, feedSvg.firstChild);
+            }
+            const feedPath = feedSvg.querySelector('path');
+            if (feedPath) {
+              feedPath.setAttribute('fill', `url(#likeGradient-${post.id})`);
+              feedPath.setAttribute('stroke', `url(#likeGradient-${post.id})`);
+            }
+          }
+        }
+        
+        showHeartsOverlay();
+      } else {
+        // Unlike the post
+        likedPosts.delete(post.id);
+        likeBtn.dataset.liked = 'false';
+        likeBtn.classList.remove('liked');
+        
+        // Remove gradient
+        const svg = likeBtn.querySelector('svg');
+        const path = svg.querySelector('path');
+        if (path) {
+          path.setAttribute('fill', 'none');
+          path.setAttribute('stroke', 'currentColor');
+        }
+        
+        // Update count
+        const countEl = popup.querySelector('.shitstagram-count');
+        if (countEl) {
+          const currentCount = parseInt(countEl.textContent.replace(/\./g, '').replace(/,/g, ''));
+          countEl.textContent = (currentCount - 1).toLocaleString();
+        }
+        
+        // Update all feed instances
+        const feedCountEl = document.querySelector(`.shitstagram-likes-count[data-post-id="${post.id}"]`);
+        if (feedCountEl) {
+          const currentCount = parseInt(feedCountEl.textContent.replace(/\./g, '').replace(/,/g, ''));
+          feedCountEl.textContent = (currentCount - 1).toLocaleString();
+        }
+        
+        // Update feed like button visual state
+        const feedLikeBtn = document.querySelector(`.shitstagram-like-btn[data-post-id="${post.id}"]`);
+        if (feedLikeBtn) {
+          feedLikeBtn.dataset.liked = 'false';
+          feedLikeBtn.classList.remove('liked');
+          const feedSvg = feedLikeBtn.querySelector('svg');
+          const feedPath = feedSvg?.querySelector('path');
+          if (feedPath) {
+            feedPath.setAttribute('fill', 'none');
+            feedPath.setAttribute('stroke', 'currentColor');
+          }
+        }
+      }
     };
   }
 }
