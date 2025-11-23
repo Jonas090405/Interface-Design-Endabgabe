@@ -2060,6 +2060,14 @@ select:focus {
   gap: 12px;
   padding: 12px;
   border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.shitstagram-share-user.selected {
+  border-color: #B20CE9;
+  background: rgba(178, 12, 233, 0.1);
 }
 
 .shitstagram-share-user-name {
@@ -2067,25 +2075,6 @@ select:focus {
   color: #fff;
   font-size: 0.9em;
   font-weight: 600;
-}
-
-.shitstagram-send-btn {
-  background: transparent;
-  border: 2px solid transparent;
-  color: #fff;
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-size: 0.85em;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin: 0;
-}
-
-.shitstagram-send-btn:hover {
-  background: transparent;
-  border-color: #B20CE9;
-  transform: scale(1.05);
 }
 
 #checkout-inner h2 {
@@ -2465,7 +2454,7 @@ select:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 10005;
   animation: popupFadeIn 0.3s ease;
   overflow: hidden;
 }
@@ -2648,7 +2637,7 @@ select:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
+  z-index: 10003;
   animation: popupFadeIn 0.8s ease;
   transition: opacity 3s ease, transform 3s ease;
 }
