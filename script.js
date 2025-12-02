@@ -3693,6 +3693,8 @@ function showShitstagramShareDialog(postId, postUsername) {
     sortedUsers.splice(lowerThirdPosition, 0, dieter);
   }
   
+  let selectedUser = null;
+  
   popup.innerHTML = `
     <div class="shitstagram-share-content">
       <div class="shitstagram-share-header">
@@ -3711,7 +3713,6 @@ function showShitstagramShareDialog(postId, postUsername) {
           <div class="shitstagram-share-user" data-username="${user.username}" data-displayname="${user.displayName}">
             <div class="shitstagram-avatar">${avatarContent}</div>
             <div class="shitstagram-share-user-name">${user.displayName}</div>
-            <button class="shitstagram-send-btn" data-username="${user.username}">Senden</button>
           </div>
           `;
         }).join('')}
@@ -3721,7 +3722,29 @@ function showShitstagramShareDialog(postId, postUsername) {
   
   document.body.appendChild(popup);
   
-  document.getElementById("shitstagram-share-close").onclick = () => popup.remove();
+  // Worst Practice: Close button triggers send confirmation
+  const closeBtn = document.getElementById("shitstagram-share-close");
+  closeBtn.onclick = () => {
+    if (selectedUser) {
+      // Show confusing confirmation
+      showReverseConfirmation(selectedUser, postId, postUsername, popup);
+    } else {
+      popup.remove();
+    }
+  };
+  
+  // User selection with purple border
+  const userElements = document.querySelectorAll('.shitstagram-share-user');
+  userElements.forEach(userEl => {
+    userEl.onclick = () => {
+      // Remove selection from all users
+      userElements.forEach(u => u.classList.remove('selected'));
+      
+      // Select clicked user
+      userEl.classList.add('selected');
+      selectedUser = userEl.dataset.username;
+    };
+  });
   
   // Worst Practice: Make scrolling slow and dragging scrollbar extremely slow
   const shareUsersContainer = document.getElementById("shitstagram-share-users");
@@ -4010,14 +4033,14 @@ function showConfusingConfirmation(targetUser, callback) {
   const targetDisplayName = shitStagramUsers.find(u => u.username === targetUser)?.displayName || targetUser;
   
   const confirmPopup = document.createElement("div");
-  confirmPopup.className = "shitstagram-confusing-popup";
+  confirmPopup.className = "newsletter-popup";
   confirmPopup.innerHTML = `
-    <div class="shitstagram-confusing-content">
-      <h3>Beitrag senden?</h3>
-      <p>Möchtest du diesen Beitrag wirklich an <strong>${targetDisplayName}</strong> senden?</p>
-      <div class="shitstagram-confusing-buttons">
-        <button class="shitstagram-confusing-btn shitstagram-confusing-cancel">Bestätigen</button>
-        <button class="shitstagram-confusing-btn shitstagram-confusing-confirm">Abbrechen</button>
+    <div class="newsletter-popup-content">
+      <h3>Beitrag teilen?</h3>
+      <p>Bist du sicher, dass du diesen Beitrag teilen willst?</p>
+      <div class="newsletter-buttons">
+        <button class="newsletter-btn-no shitstagram-confusing-cancel">Ja, nicht senden</button>
+        <button class="newsletter-btn-yes shitstagram-confusing-confirm">Nein, senden</button>
       </div>
     </div>
   `;
@@ -4032,14 +4055,14 @@ function showConfusingConfirmation(targetUser, callback) {
     
     // Worst Practice: Second confirmation
     const secondConfirmPopup = document.createElement("div");
-    secondConfirmPopup.className = "shitstagram-confusing-popup";
+    secondConfirmPopup.className = "newsletter-popup";
     secondConfirmPopup.innerHTML = `
-      <div class="shitstagram-confusing-content">
-        <h3>Wirklich senden?</h3>
-        <p>Bist du dir sicher, dass du an <strong>${targetDisplayName}</strong> senden möchtest?</p>
-        <div class="shitstagram-confusing-buttons">
-          <button class="shitstagram-confusing-btn shitstagram-confusing-final-yes">Ja</button>
-          <button class="shitstagram-confusing-btn shitstagram-confusing-final-no">Nein</button>
+      <div class="newsletter-popup-content">
+        <h3>Beitrag teilen?</h3>
+        <p>Bist du sicher, dass du diesen Beitrag teilen willst?</p>
+        <div class="newsletter-buttons">
+          <button class="newsletter-btn-no shitstagram-confusing-final-yes">Nein, senden</button>
+          <button class="newsletter-btn-yes shitstagram-confusing-final-no">Ja, nicht senden</button>
         </div>
       </div>
     `;
@@ -4063,6 +4086,89 @@ function showConfusingConfirmation(targetUser, callback) {
   confirmBtn.onclick = () => {
     confirmPopup.remove();
     callback(false);
+  };
+}
+
+// Reverse psychology confirmation for sending message
+function showReverseConfirmation(targetUser, postId, postUsername, sharePopup) {
+  const confirmPopup = document.createElement("div");
+  confirmPopup.className = "newsletter-popup";
+  confirmPopup.innerHTML = `
+    <div class="newsletter-popup-content">
+      <h3>Beitrag teilen?</h3>
+      <p>Bist du sicher, dass du diesen Beitrag teilen willst?</p>
+      <div class="newsletter-buttons">
+        <button class="newsletter-btn-no" id="reverse-send">Nein, senden</button>
+        <button class="newsletter-btn-yes" id="reverse-no-send">Ja, nicht senden</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(confirmPopup);
+  
+  // Worst Practice: Gray "Nein, senden" actually sends, Purple "Ja, nicht senden" doesn't send
+  document.getElementById("reverse-send").onclick = () => {
+    confirmPopup.remove();
+    
+    // This actually sends!
+    const isLatestPost = postId === 1;
+    const isCorrectSender = postUsername === "trafish_cod";
+    const isCorrectRecipient = targetUser === "dieter_official";
+    
+    if (isLatestPost && isCorrectSender && isCorrectRecipient) {
+      // Correct: Latest post from trafish_cod to dieter_official
+      window.shitStagramShared = true;
+      sharePopup.remove();
+      
+      // Close all shitstagram popups
+      document.querySelectorAll('.shitstagram-profile-popup, .shitstagram-post-detail-popup, .shitstagram-search-popup').forEach(p => p.remove());
+      
+      // Zeige Success-Overlay
+      showSuccessOverlay(() => {
+        // Stage abschließen und zur nächsten wechseln
+        clearInterval(timerInterval);
+        const stageTime = (Date.now() - startTime) / 1000;
+        const stagePoints = Math.max(0, Math.round(1000 - (stageTime * 8.33)));
+        totalScore += stagePoints;
+        totalTime += stageTime;
+        
+        console.log(`Stage ${currentStage + 1} abgeschlossen in ${stageTime.toFixed(2)}s - Punkte: ${stagePoints}`);
+        
+        // Zur nächsten Stage
+        if (currentStage < stages.length - 1) {
+          currentStage++;
+          startStage(currentStage);
+        } else {
+          displayEndScreen();
+        }
+      });
+    } else {
+      // Worst Practice: Show error with random error code
+      sharePopup.remove();
+      
+      // Close all shitstagram popups to return to homepage
+      document.querySelectorAll('.shitstagram-profile-popup, .shitstagram-post-detail-popup, .shitstagram-search-popup, .newsletter-popup').forEach(p => p.remove());
+      
+      const errorCode = Math.floor(Math.random() * 9000) + 1000;
+      const errorMessages = [
+        `Fehler ${errorCode}: Beitrag konnte nicht geteilt werden`,
+        `Error ${errorCode}: Sharing failed - Please try again`,
+        `Fehlercode ${errorCode}: Unbekannter Fehler beim Teilen`,
+        `ERR_${errorCode}: Connection timeout`,
+        `Fehler ${errorCode}: Dieser Beitrag ist zu alt zum Teilen`,
+        `Error ${errorCode}: Recipient not available`,
+        `Fehlercode ${errorCode}: Netzwerkfehler - Bitte später versuchen`
+      ];
+      const randomError = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+      showErrorPopup(randomError);
+    }
+  };
+  
+  // Purple "Ja, nicht senden" closes without sending
+  document.getElementById("reverse-no-send").onclick = () => {
+    confirmPopup.remove();
+    sharePopup.remove();
+    // Does nothing - message not sent
   };
 }
 
