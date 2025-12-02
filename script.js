@@ -77,7 +77,7 @@ const stages = [
         <div class="shitstagram-header">
           <div class="shitstagram-branding">
             <div class="shitstagram-subtitle">Shitstagram</div>
-            <div class="shitstagram-task">Sende den neusten Post von "Trafish cod" an deinen Freund Dieter</div>
+            <div class="shitstagram-task">Like und sende den neusten Post von "Trafish cod" an deinen Freund Dieter</div>
           </div>
           <div class="shitstagram-top-actions">
             <button class="shitstagram-icon-btn" id="shitstagram-search-btn">
@@ -95,9 +95,12 @@ const stages = [
       </div>
     `,
     validate: () => {
-      // Prüfe ob Post an Dieter gesendet wurde
+      // Prüfe ob Post an Dieter gesendet wurde UND geliked wurde
       if (!window.shitStagramShared) {
         return "Du musst den neusten Post von 'Trafish cod' an Dieter senden!";
+      }
+      if (!likedPosts.has(1)) {
+        return "Du musst den neusten Post von 'Trafish cod' auch liken!";
       }
       return "";
     }
@@ -467,7 +470,8 @@ function showProductConfig(product) {
   configPopup.innerHTML = `
     <div class="config-popup-content">
       <button class="config-close-btn" id="config-close-btn">×</button>
-      <h3 style="color: #B20CE9; margin-bottom: 30px; font-size: 1.5em;">${product.name} - Konfiguration</h3>
+      <h3 style="color: #B20CE9; margin-bottom: 10px; font-size: 1.5em;">${product.name} - Konfiguration</h3>
+      <p style="color: #3a3a3a; font-size: 0.7em; margin-bottom: 25px; opacity: 0.4; font-style: italic;">Nutze die Zahltasten 1, 2, 3, 4, um zu konfigurieren</p>
       
       <div class="config-section">
         <label class="config-label">Prozessor auswählen:</label>
@@ -557,54 +561,133 @@ function showProductConfig(product) {
   // Worst Practice: Nur ein Button pro Kategorie kann angeklickt werden, andere verschwinden
   const optionBtns = configPopup.querySelectorAll('.config-option-btn');
   
-  // Add click handlers
+  // Disable mouse clicks on option buttons
   optionBtns.forEach(btn => {
+    btn.style.cursor = 'not-allowed';
     btn.onclick = (e) => {
+      e.preventDefault();
       e.stopPropagation();
-      
-      const option = btn.dataset.option;
-      const value = btn.dataset.value;
-      
-      // Speichere Auswahl
-      selectedConfig[option] = value;
-      
-      // Worst Practice: Alle anderen Buttons dieser Kategorie ausblenden
-      configPopup.querySelectorAll(`[data-option="${option}"]`).forEach(b => {
-        if (b !== btn) {
-          b.style.display = 'none';
-        } else if (b === btn) {
-          b.classList.add('selected');
-          b.disabled = true;
-        }
-      });
-      
-      // Prüfe ob alle Optionen ausgewählt
-      const allSelected = Object.values(selectedConfig).every(v => v !== null);
-      
-      if (allSelected) {
-        const confirmBtn = configPopup.querySelector('#config-confirm-btn');
-        if (confirmBtn) {
-          confirmBtn.disabled = false;
-        }
-        const summary = configPopup.querySelector('#config-summary');
-        if (summary) {
-          summary.style.display = 'block';
-        }
-        const selected = configPopup.querySelector('#config-selected');
-        if (selected) {
-          selected.textContent = 
-            `CPU: ${selectedConfig.cpu}, RAM: ${selectedConfig.ram}GB, Speicher: ${selectedConfig.storage}GB, GPU: ${selectedConfig.gpu}, OS: ${selectedConfig.os}`;
-        }
-      }
+      return false;
     };
   });
+  
+  // Function to select an option
+  function selectOption(btn) {
+    const option = btn.dataset.option;
+    const value = btn.dataset.value;
+    
+    // Speichere Auswahl
+    selectedConfig[option] = value;
+    
+    // Worst Practice: Alle anderen Buttons dieser Kategorie ausblenden
+    configPopup.querySelectorAll(`[data-option="${option}"]`).forEach(b => {
+      if (b !== btn) {
+        b.style.display = 'none';
+      } else if (b === btn) {
+        b.classList.add('selected');
+        b.disabled = true;
+        b.style.cursor = 'not-allowed';
+      }
+    });
+    
+    // Prüfe ob alle Optionen ausgewählt
+    const allSelected = Object.values(selectedConfig).every(v => v !== null);
+    
+    if (allSelected) {
+      const confirmBtn = configPopup.querySelector('#config-confirm-btn');
+      if (confirmBtn) {
+        confirmBtn.disabled = false;
+      }
+      const summary = configPopup.querySelector('#config-summary');
+      if (summary) {
+        summary.style.display = 'block';
+      }
+      const selected = configPopup.querySelector('#config-selected');
+      if (selected) {
+        selected.textContent = 
+          `CPU: ${selectedConfig.cpu}, RAM: ${selectedConfig.ram}GB, Speicher: ${selectedConfig.storage}GB, GPU: ${selectedConfig.gpu}, OS: ${selectedConfig.os}`;
+      }
+    }
+  }
+  
+  // Keyboard controls - only 1, 2, 3, 4 keys work
+  function handleConfigKeypress(e) {
+    const key = e.key;
+    
+    // Only accept keys 1-4
+    if (!['1', '2', '3', '4'].includes(key)) return;
+    
+    // Find all visible sections
+    const sections = configPopup.querySelectorAll('.config-section');
+    let currentSection = null;
+    
+    // Find first section with visible buttons
+    for (const section of sections) {
+      const visibleBtns = Array.from(section.querySelectorAll('.config-option-btn')).filter(
+        btn => btn.style.display !== 'none' && !btn.disabled
+      );
+      if (visibleBtns.length > 0) {
+        currentSection = section;
+        break;
+      }
+    }
+    
+    if (!currentSection) return;
+    
+    // Get visible buttons in current section
+    const visibleBtns = Array.from(currentSection.querySelectorAll('.config-option-btn')).filter(
+      btn => btn.style.display !== 'none' && !btn.disabled
+    );
+    
+    const index = parseInt(key) - 1;
+    if (index >= 0 && index < visibleBtns.length) {
+      selectOption(visibleBtns[index]);
+    }
+  }
+  
+  // Add keyboard event listener
+  document.addEventListener('keydown', handleConfigKeypress);
+  
+  // Store original close function to remove event listener
+  const originalClose = closeBtn.onclick;
+  closeBtn.onclick = (e) => {
+    document.removeEventListener('keydown', handleConfigKeypress);
+    originalClose(e);
+  };
   
   // Bestätigen-Button - use querySelector on popup
   const confirmBtn = configPopup.querySelector('#config-confirm-btn');
   if (confirmBtn) {
+    let chargeTimeout = null;
+    let isCharged = false;
+    
+    confirmBtn.addEventListener('mouseenter', () => {
+      if (confirmBtn.disabled) return;
+      
+      confirmBtn.classList.add('charging');
+      chargeTimeout = setTimeout(() => {
+        isCharged = true;
+        confirmBtn.classList.remove('charging');
+        confirmBtn.classList.add('charged');
+        confirmBtn.style.cursor = 'pointer';
+      }, 5000);
+    });
+    
+    confirmBtn.addEventListener('mouseleave', () => {
+      if (confirmBtn.disabled) return;
+      
+      clearTimeout(chargeTimeout);
+      isCharged = false;
+      confirmBtn.classList.remove('charging', 'charged');
+      confirmBtn.style.cursor = 'not-allowed';
+      confirmBtn.style.backgroundPosition = '100% 0';
+    });
+    
     confirmBtn.onclick = (e) => {
       e.preventDefault();
       e.stopPropagation();
+      
+      if (!isCharged) return;
       
       // All items available, proceed to checkout
       configPopup.remove();
@@ -674,7 +757,7 @@ function showPurchaseNotification() {
   notification.className = "purchase-notification";
   notification.innerHTML = `
     <div class="purchase-notification-content">
-      <span class="purchase-icon">🛒</span>
+      <span class="purchase-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></span>
       <div class="purchase-text">
         <strong>${randomUser}</strong> hat soeben<br>
         <span class="purchase-product">${randomProduct.name}</span> gekauft!
@@ -736,7 +819,7 @@ function showSearchStillPopup() {
   popup.className = "newsletter-popup";
   popup.innerHTML = `
     <div class="newsletter-popup-content">
-      <h3>🔍 Suchst du immer noch?</h3>
+      <h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="vertical-align: middle; margin-right: 8px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Suchst du immer noch?</h3>
       <p>Brauchst du Hilfe bei der Produktsuche?</p>
       <div class="newsletter-buttons">
         <button class="newsletter-btn-yes" id="search-no">Ja aber ich brauch keine Hilfe</button>
@@ -818,7 +901,7 @@ function showCustomerSupportPopup() {
       const messageDiv = document.createElement("div");
       messageDiv.style.cssText = "background: #1a1a1a; border: 2px solid #B20CE9; border-radius: 8px; padding: 15px; margin-top: 15px; text-align: center;";
       messageDiv.innerHTML = `
-        <p style="color: #B20CE9; margin: 0; font-weight: 600;">❌ Support momentan nicht verfügbar</p>
+        <p style="color: #B20CE9; margin: 0; font-weight: 600;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B20CE9" stroke-width="2" style="vertical-align: middle; margin-right: 4px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Support momentan nicht verfügbar</p>
         <p style="color: #999; margin: 5px 0 0 0; font-size: 0.85em;">Bitte versuche es während unserer Öffnungszeiten erneut.</p>
       `;
       
@@ -914,9 +997,122 @@ function setupCheckout() {
       this.classList.remove("active");
     });
   });
+  
+  // Worst Practice: Passwort-Feld zeigt Shake-Animation bei RICHTIGEM Input
+  const passwordInput = document.getElementById("password");
+  let lastPasswordValue = "";
+  
+  passwordInput.addEventListener("input", function() {
+    const currentValue = this.value;
+    
+    // Ignore placeholder text
+    if (currentValue === "Passwort" || currentValue === "") {
+      lastPasswordValue = currentValue;
+      return;
+    }
+    
+    // Check if password is actually valid
+    const errors = validatePassword(currentValue);
+    
+    // Shake animation on CORRECT password (worst practice!)
+    if (errors.length === 0 && currentValue !== lastPasswordValue && currentValue.length >= 12) {
+      this.classList.remove('shake-error');
+      void this.offsetWidth; // Trigger reflow
+      this.classList.add('shake-error');
+      
+      setTimeout(() => {
+        this.classList.remove('shake-error');
+      }, 500);
+    }
+    
+    lastPasswordValue = currentValue;
+  });
 
-  // Wenn "Bestellen" geklickt wird
-  document.getElementById("buy-final-btn").onclick = () => {
+  // CPS System für Bestellen-Button (12 Klicks in 2 Sekunden)
+  const buyBtn = document.getElementById("buy-final-btn");
+  let clickCount = 0;
+  let cpsTimeout = null;
+  let firstClickTime = null;
+  const requiredClicks = 12;
+  const timeWindow = 2000; // 2 Sekunden
+  
+  function resetCPS() {
+    buyBtn.classList.remove('cps-pulse');
+    buyBtn.classList.add('cps-reset');
+    setTimeout(() => {
+      buyBtn.classList.remove('cps-reset');
+      buyBtn.style.transform = 'scale(1)';
+      buyBtn.style.background = '#7a0a9a';
+      buyBtn.style.filter = 'brightness(0.8)';
+    }, 300);
+    clickCount = 0;
+    firstClickTime = null;
+    if (cpsTimeout) {
+      clearTimeout(cpsTimeout);
+      cpsTimeout = null;
+    }
+  }
+  
+  buyBtn.onclick = () => {
+    const now = Date.now();
+    
+    // Set first click time
+    if (firstClickTime === null) {
+      firstClickTime = now;
+      // Set timeout for 2 seconds from first click
+      cpsTimeout = setTimeout(() => {
+        resetCPS();
+      }, timeWindow);
+    }
+    
+    // Check if 2 seconds have passed since first click
+    if (now - firstClickTime > timeWindow) {
+      resetCPS();
+      // Start new sequence
+      firstClickTime = now;
+      cpsTimeout = setTimeout(() => {
+        resetCPS();
+      }, timeWindow);
+    }
+    
+    clickCount++;
+    
+    // Pulse Animation
+    buyBtn.classList.remove('cps-pulse');
+    void buyBtn.offsetWidth; // Trigger reflow
+    buyBtn.classList.add('cps-pulse');
+    
+    // Scale up progressively
+    const scaleProgress = 1 + (clickCount / requiredClicks) * 0.2; // Max 1.2x scale
+    buyBtn.style.transform = `scale(${scaleProgress})`;
+    buyBtn.style.setProperty('--current-scale', scaleProgress);
+    
+    // Color progression from dark to bright purple
+    const colorProgress = clickCount / requiredClicks;
+    const r = Math.round(122 + (178 - 122) * colorProgress);
+    const g = Math.round(10 + (12 - 10) * colorProgress);
+    const b = Math.round(154 + (233 - 154) * colorProgress);
+    buyBtn.style.background = `rgb(${r}, ${g}, ${b})`;
+    
+    // Brightness progression
+    const brightness = 0.8 + (0.5 * colorProgress); // 0.8 to 1.3
+    buyBtn.style.filter = `brightness(${brightness})`;
+    
+    // Check if required clicks reached
+    if (clickCount >= requiredClicks) {
+      // Execute order
+      clearTimeout(cpsTimeout);
+      executeOrder();
+      clickCount = 0;
+      firstClickTime = null;
+      buyBtn.style.transform = 'scale(1)';
+      buyBtn.style.background = '#7a0a9a';
+      buyBtn.style.filter = 'brightness(0.8)';
+      return;
+    }
+  };
+  
+  function executeOrder() {
     const nameValue = document.getElementById("name").value.trim();
     const emailValue = document.getElementById("email").value.trim();
     const countryValue = document.getElementById("country").value.trim();
@@ -947,7 +1143,7 @@ function setupCheckout() {
 
     // Zeige Newsletter-Popup (Worst Practice!)
     showNewsletterPopup();
-  };
+  }
 }
 
 // Absurde Passwort-Validierung
@@ -1036,7 +1232,7 @@ function showNewsletterPopup() {
   popup.className = "newsletter-popup";
   popup.innerHTML = `
     <div class="newsletter-popup-content">
-      <h3>📧 Newsletter abonnieren?</h3>
+      <h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="vertical-align: middle; margin-right: 8px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Newsletter abonnieren?</h3>
       <p>Erhalte exklusive Angebote und News!</p>
       <div class="newsletter-buttons">
         <button class="newsletter-btn-no" id="newsletter-no">Ja, ich möchte KEINE Updates</button>
@@ -1051,7 +1247,7 @@ function showNewsletterPopup() {
     popup.classList.add("closing");
     setTimeout(() => {
       popup.remove();
-      completeCheckout();
+      showLongScrollText();
     }, 3000);
   };
   
@@ -1059,7 +1255,7 @@ function showNewsletterPopup() {
     popup.classList.add("closing");
     setTimeout(() => {
       popup.remove();
-      showConfirmationPopup();
+      showLongScrollText();
     }, 3000);
   };
 }
@@ -1070,7 +1266,7 @@ function showConfirmationPopup() {
   popup.className = "newsletter-popup";
   popup.innerHTML = `
     <div class="newsletter-popup-content">
-      <h3>⚠️ Bist du sicher?</h3>
+      <h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="vertical-align: middle; margin-right: 8px;"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Bist du sicher?</h3>
       <p>Du verpasst großartige Angebote!</p>
       <div class="newsletter-buttons">
         <button class="newsletter-btn-no" id="confirm-yes">Ja, Newsletter bitte!</button>
@@ -1109,7 +1305,7 @@ function showLongScrollText() {
         <p><strong>Willkommen zu unserem fantastischen Newsletter!</strong></p>
         <p>Wir bei WorstBuy sind stolz darauf, dir die besten Angebote zu präsentieren. Unser Newsletter ist nicht einfach nur eine E-Mail – es ist eine Erfahrung!</p>
         
-        <h4>📰 Was du erhältst:</h4>
+        <h4><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="vertical-align: middle; margin-right: 6px;"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><line x1="10" y1="6" x2="18" y2="6"/><line x1="10" y1="10" x2="18" y2="10"/><line x1="10" y1="14" x2="18" y2="14"/></svg>Was du erhältst:</h4>
         <p>• Exklusive Deals nur für Newsletter-Abonnenten</p>
         <p>• Frühzeitiger Zugang zu neuen Produkten</p>
         <p>• Persönliche Empfehlungen basierend auf deinen Interessen</p>
@@ -1171,11 +1367,11 @@ function showLongScrollText() {
         <p>• "Innovation in Retail" - Digital Commerce Awards</p>
         <p>• "Sustainability Champion" - Green Business Association</p>
         
-        <h4>🔒 Datenschutz:</h4>
+        <h4><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="vertical-align: middle; margin-right: 6px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Datenschutz:</h4>
         <p>Deine Daten sind bei uns sicher! Wir verwenden modernste Verschlüsselung und geben deine Informationen niemals an Dritte weiter. Du kannst dich jederzeit mit einem Klick abmelden.</p>
         <p>DSGVO-konform, SSL-verschlüsselt, regelmäßige Security-Audits.</p>
         
-        <h4>📅 Was dich erwartet:</h4>
+        <h4><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="vertical-align: middle; margin-right: 6px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Was dich erwartet:</h4>
         <p>• Montag: Deal der Woche</p>
         <p>• Mittwoch: Tech-Tipps & Tricks</p>
         <p>• Freitag: Flash-Sales & Gewinnspiele</p>
@@ -1205,11 +1401,30 @@ function showLongScrollText() {
   const scrollDiv = document.getElementById("long-text-scroll");
   const closeBtn = document.getElementById("long-text-close");
   
-  // Worst Practice: SEHR langsames Scrollen nur mit Mausrad
+  // Worst Practice: Exponentiell langsamer werdender Scroll mit Reset
+  let scrollCount = 0;
+  const maxScrollCount = 20; // Nach 20 Scrolls reset
+  const baseSpeed = 0.08; // Basis-Geschwindigkeit
+  const minSpeed = 0.005; // Minimale Geschwindigkeit
+  
   scrollDiv.addEventListener("wheel", (e) => {
     e.preventDefault();
-    // Nur 6% der normalen Scroll-Geschwindigkeit
-    scrollDiv.scrollTop += e.deltaY * 0.06;
+    
+    // Exponentiell langsamer: speed = baseSpeed * (0.7 ^ scrollCount)
+    const exponent = scrollCount / 5; // Alle 5 Scrolls halbiert sich etwa die Geschwindigkeit
+    let currentSpeed = baseSpeed * Math.pow(0.7, exponent);
+    
+    // Minimum einhalten
+    currentSpeed = Math.max(currentSpeed, minSpeed);
+    
+    scrollDiv.scrollTop += e.deltaY * currentSpeed;
+    
+    scrollCount++;
+    
+    // Reset nach maxScrollCount
+    if (scrollCount >= maxScrollCount) {
+      scrollCount = 0;
+    }
   }, { passive: false });
   
   // Aktiviere Button nur wenn ganz unten gescrollt
@@ -3516,17 +3731,29 @@ function showShitstagramShareDialog(postId, postUsername) {
   let dragStartY = 0;
   let dragStartScroll = 0;
   
-  // Slow wheel scrolling
+  // Exponentially slow wheel scrolling with reset
+  let shareScrollCount = 0;
+  const maxShareScrollCount = 25; // Nach 25 Scrolls reset
+  const baseShareSpeed = 0.5; // Basis-Geschwindigkeit
+  const minShareSpeed = 0.05; // Minimale Geschwindigkeit
+  
   shareUsersContainer.addEventListener('wheel', (e) => {
     e.preventDefault();
     
     if (isScrolling) return;
     isScrolling = true;
     
-    const scrollAmount = e.deltaY * 0.45; // 45% der normalen Scroll-Geschwindigkeit (schneller)
+    // Exponentiell langsamer: speed = baseSpeed * (0.75 ^ scrollCount)
+    const exponent = shareScrollCount / 4; // Alle 4 Scrolls wird es deutlich langsamer
+    let currentSpeed = baseShareSpeed * Math.pow(0.75, exponent);
+    
+    // Minimum einhalten
+    currentSpeed = Math.max(currentSpeed, minShareSpeed);
+    
+    const scrollAmount = e.deltaY * currentSpeed;
     const targetScroll = shareUsersContainer.scrollTop + scrollAmount;
     const startScroll = shareUsersContainer.scrollTop;
-    const duration = 100; // 100ms für jeden Scroll (schneller)
+    const duration = 100;
     const startTime = performance.now();
     
     function smoothScroll(currentTime) {
@@ -3545,6 +3772,13 @@ function showShitstagramShareDialog(postId, postUsername) {
     }
     
     requestAnimationFrame(smoothScroll);
+    
+    shareScrollCount++;
+    
+    // Reset nach maxShareScrollCount
+    if (shareScrollCount >= maxShareScrollCount) {
+      shareScrollCount = 0;
+    }
   }, { passive: false });
   
   // Worst Practice: Extremely slow scrollbar dragging
@@ -3558,14 +3792,30 @@ function showShitstagramShareDialog(postId, postUsername) {
       dragStartY = e.clientY;
       dragStartScroll = shareUsersContainer.scrollTop;
       shareUsersContainer.style.userSelect = 'none';
+      dragMoveCount = 0; // Reset beim Start des Drags
     }
   });
+  
+  let dragMoveCount = 0;
+  const maxDragMoveCount = 30;
+  const baseDragSpeed = 0.35;
+  const minDragSpeed = 0.05;
   
   document.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
     
+    // Exponentiell langsamer beim Draggen
+    const exponent = dragMoveCount / 5;
+    let currentDragSpeed = baseDragSpeed * Math.pow(0.8, exponent);
+    currentDragSpeed = Math.max(currentDragSpeed, minDragSpeed);
+    
     const deltaY = e.clientY - dragStartY;
-    const slowDelta = deltaY * 0.3; // Nur 30% der normalen Geschwindigkeit beim Draggen
+    const slowDelta = deltaY * currentDragSpeed;
+    
+    dragMoveCount++;
+    if (dragMoveCount >= maxDragMoveCount) {
+      dragMoveCount = 0;
+    }
     
     // Clear previous interval
     if (scrollbarDragInterval) {
@@ -3614,7 +3864,14 @@ function showShitstagramShareDialog(postId, postUsername) {
         const isCorrectRecipient = targetUser === "dieter_official";
         
         if (isLatestPost && isCorrectSender && isCorrectRecipient) {
-          // Correct: Latest post from trafish_cod to dieter_official
+          // Check if post is also liked
+          if (!likedPosts.has(postId)) {
+            popup.remove();
+            showErrorPopup("Du musst den Post erst liken, bevor du ihn teilen kannst!");
+            return;
+          }
+          
+          // Correct: Latest post from trafish_cod to dieter_official AND liked
           window.shitStagramShared = true;
           popup.remove();
           
