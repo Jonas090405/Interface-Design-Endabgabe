@@ -107,20 +107,446 @@ const stages = [
   },
   
   {
-    title: "Stage 3: Klick-Challenge",
+    title: "Stage 3: Video Challenge",
     content: `
-      <div style="max-width: 600px; margin: 0 auto; padding: 40px; text-align: center;">
-        <p style="color: #ccc; margin-bottom: 30px;">Klicke genau 10 Mal auf den Button:</p>
-        <button id="click-counter-btn" style="padding: 20px 40px; font-size: 1.2em; background: #B20CE9; color: #fff; border: 3px solid #B20CE9; border-radius: 12px; cursor: pointer; font-weight: bold;">
-          Klicks: <span id="click-count">0</span> / 10
-        </button>
+      <div style="width: 100vw; height: 100vh; margin: 0; padding: 0; box-sizing: border-box; position: fixed; top: 0; left: 0; overflow-y: auto; background: #0f0f0f;">
+        <!-- YouPoop Header -->
+        <div style="position: sticky; top: 0; background: #0f0f0f; border-bottom: 1px solid #303030; padding: 12px 20px; display: flex; align-items: center; justify-content: center; z-index: 1000; position: relative;">
+          <div style="position: absolute; left: 20px; display: flex; align-items: center; gap: 12px;">
+            <div style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+              <svg width="32" height="24" viewBox="0 0 90 64" style="fill: #B20CE9;">
+                <path d="M88,13.8c-0.8-3-2.9-5.4-5.6-6.1C75.5,5.5,45,5.5,45,5.5s-30.5,0-37.4,2.2 C4.9,8.4,2.8,10.8,2,13.8C0,20.8,0,35,0,35s0,14.2,2,21.2c0.8,3,2.9,5.4,5.6,6.1C14.5,64.5,45,64.5,45,64.5s30.5,0,37.4-2.2 c2.7-0.7,4.8-3.1,5.6-6.1C90,49.2,90,35,90,35S90,20.8,88,13.8z" fill="#B20CE9"/>
+                <path d="M36,50.1L59.5,35L36,19.9V50.1z" fill="#fff"/>
+              </svg>
+            </div>
+            <div style="font-size: 1.4em; font-weight: 700; color: #fff; letter-spacing: -0.5px;">YouPoop</div>
+          </div>
+          <div style="color: #ccc; font-size: 0.95em; font-weight: 500;">📺 Schaue das Video bis zum Ende</div>
+        </div>
+        
+        <div style="padding: 20px;">
+          
+          <div style="display: flex; gap: 24px;">
+          <!-- Main Video Area -->
+          <div style="flex: 1.3; min-width: 0;">
+            <!-- Video Player -->
+            <div id="youtube-player" style="background: #000; border-radius: 12px; width: 100%; max-height: 65vh; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; cursor: pointer;">
+              <!-- Thumbnail -->
+              <div id="video-thumbnail" style="width: 100%; height: 100%; background: linear-gradient(135deg, #B20CE9 0%, #5a2a7a 100%); display: flex; align-items: center; justify-content: center; position: relative;">
+                <div style="text-align: center; color: #fff;">
+                  <div style="font-size: 3em; margin-bottom: 10px;">🎬</div>
+                  <div style="font-size: 1.5em; font-weight: bold;">Placeholder Video</div>
+                  <div style="font-size: 0.9em; opacity: 0.8; margin-top: 5px;">Sample Content</div>
+                </div>
+                
+                <!-- Play Button Overlay -->
+                <div id="play-button-overlay" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3);">
+                  <svg id="play-button" width="80" height="80" viewBox="0 0 68 48" style="opacity: 0.95; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3)); transition: transform 0.2s;">
+                    <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#B20CE9"/>
+                    <path d="M 45,24 27,14 27,34" fill="#fff"/>
+                  </svg>
+                </div>
+                
+                <!-- Video Duration Badge -->
+                <div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.8); color: #fff; padding: 3px 6px; border-radius: 3px; font-size: 12px; font-weight: 600;">0:05</div>
+              </div>
+              
+              <!-- YouTube Controls -->
+              <div id="youtube-controls" style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 70%, transparent 100%); padding: 50px 12px 10px 12px; opacity: 0; transition: opacity 0.2s;">
+                <!-- Progress Bar -->
+                <div style="position: relative; height: 5px; background: rgba(255,255,255,0.3); border-radius: 2px; margin-bottom: 10px; cursor: pointer;">
+                  <div id="video-buffer" style="position: absolute; left: 0; top: 0; height: 100%; background: rgba(255,255,255,0.4); border-radius: 2px; width: 0%;"></div>
+                  <div id="video-progress" style="position: absolute; left: 0; top: 0; height: 100%; background: #f00; border-radius: 2px; width: 0%;"></div>
+                </div>
+                
+                <!-- Control Buttons -->
+                <div style="display: flex; align-items: center; gap: 10px; color: #fff; font-size: 14px;">
+                  <button id="yt-play-btn" style="background: none; border: none; color: #fff; cursor: pointer; padding: 4px; display: flex; align-items: center;">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </button>
+                  
+                  <button style="background: none; border: none; color: #fff; cursor: pointer; padding: 4px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                    </svg>
+                  </button>
+                  
+                  <span id="video-time" style="font-family: 'Roboto', sans-serif; font-size: 13px; margin-left: 4px;">0:00 / 0:05</span>
+                  
+                  <div style="flex: 1;"></div>
+                  
+                  <button style="background: none; border: none; color: #fff; cursor: pointer; padding: 4px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M10 8v8l6-4-6-4zm9-5H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                    </svg>
+                  </button>
+                  
+                  <button style="background: none; border: none; color: #fff; cursor: pointer; padding: 4px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Video Info -->
+            <div style="margin-top: 12px;">
+              <h3 style="color: #fff; font-size: 1.3em; margin: 0 0 12px 0; font-weight: 500; line-height: 1.4;">Worst Practice Tutorial – Complete Guide</h3>
+              
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <!-- Channel Avatar -->
+                  <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #B20CE9, #7d3ba8); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 1.1em;">W</div>
+                  
+                  <div>
+                    <div style="color: #fff; font-weight: 500; font-size: 0.95em;">WorstPractice – UX Fails</div>
+                    <div style="color: #aaa; font-size: 0.85em;">24,8 Mio. Abonnenten</div>
+                  </div>
+                  
+                  <button style="background: #fff; color: #000; border: none; padding: 10px 16px; border-radius: 18px; font-weight: 600; cursor: pointer; font-size: 0.9em; margin-left: 12px;">Abonnieren</button>
+                </div>
+                
+                <div style="display: flex; gap: 8px;">
+                  <button style="background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 10px 16px; border-radius: 18px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9em;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                    </svg>
+                    <span>15.630</span>
+                  </button>
+                  
+                  <button style="background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 10px 16px; border-radius: 18px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9em;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3h-6zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3v6zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6h6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6v-6z"/>
+                    </svg>
+                    <span>Teilen</span>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Video Description -->
+              <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 14px; margin-bottom: 20px;">
+                <div style="color: #aaa; font-size: 0.9em; margin-bottom: 8px;">
+                  <span style="font-weight: 600; color: #fff;">112.155 Aufrufe</span> • vor 1 Stunde • <span style="color: #B20CE9;">#WorstPractice</span> <span style="color: #B20CE9;">#UXFails</span>
+                </div>
+                <div style="color: #ccc; font-size: 0.9em; line-height: 1.6;">
+                  In diesem Video zeige ich euch die schlimmsten UI/UX Fails aller Zeiten! Von verwirrenden Checkout-Prozessen bis hin zu versteckten Buttons – hier seht ihr alles, was ihr NICHT machen solltet. 
+                  <br><br>
+                  Timestamps:<br>
+                  0:00 - Intro<br>
+                  0:15 - Checkout Chaos<br>
+                  2:30 - Social Media Disaster<br>
+                  4:45 - Video Challenge<br>
+                  <br>
+                  Dieses Video dient nur zu Bildungszwecken. Bitte nicht nachmachen!
+                </div>
+              </div>
+              
+              <!-- Comments Section -->
+              <div style="margin-bottom: 20px;">
+                <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+                  <h4 style="color: #fff; font-size: 1.2em; margin: 0; font-weight: 500;">287 Kommentare</h4>
+                  <button style="background: none; border: none; color: #fff; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9em;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/>
+                    </svg>
+                    Sortieren nach
+                  </button>
+                </div>
+                
+                <!-- Comment Input -->
+                <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+                  <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #7d3ba8, #5a2a7a); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold;">U</div>
+                  <input type="text" placeholder="Kommentar hinzufügen..." style="flex: 1; background: transparent; border: none; border-bottom: 1px solid #303030; color: #fff; padding: 8px 0; font-size: 0.95em; outline: none;" />
+                </div>
+                
+                <!-- Comment 1 -->
+                <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                  <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #B20CE9, #7d3ba8); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; flex-shrink: 0;">M</div>
+                  <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                      <span style="color: #fff; font-weight: 500; font-size: 0.9em;">@MaxMustermann</span>
+                      <span style="color: #aaa; font-size: 0.85em;">vor 2 Stunden</span>
+                    </div>
+                    <div style="color: #ccc; font-size: 0.95em; line-height: 1.5;">Das ist tatsächlich das Schlimmste was ich je gesehen habe! 😂 Aber sehr lehrreich!</div>
+                    <div style="display: flex; gap: 16px; margin-top: 4px; align-items: center;">
+                      <button style="background: none; border: none; color: #aaa; cursor: pointer; display: flex; align-items: center; gap: 3px; font-size: 0.85em;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                        </svg>
+                        423
+                      </button>
+                      <button style="background: none; border: none; color: #aaa; cursor: pointer; font-size: 0.85em;">Antworten</button>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Comment 2 -->
+                <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                  <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #7d3ba8, #5a2a7a); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; flex-shrink: 0;">S</div>
+                  <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                      <span style="color: #fff; font-weight: 500; font-size: 0.9em;">@SarahDesigns</span>
+                      <span style="color: #aaa; font-size: 0.85em;">vor 5 Stunden</span>
+                    </div>
+                    <div style="color: #ccc; font-size: 0.95em; line-height: 1.5;">Als UX Designerin kann ich bestätigen: So macht man es NICHT! 😅 Perfektes Beispiel für Fehldesign.</div>
+                    <div style="display: flex; gap: 16px; margin-top: 4px; align-items: center;">
+                      <button style="background: none; border: none; color: #aaa; cursor: pointer; display: flex; align-items: center; gap: 3px; font-size: 0.85em;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                        </svg>
+                        891
+                      </button>
+                      <button style="background: none; border: none; color: #aaa; cursor: pointer; font-size: 0.85em;">Antworten</button>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Comment 3 -->
+                <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                  <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #9a4ec7, #B20CE9); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; flex-shrink: 0;">T</div>
+                  <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                      <span style="color: #fff; font-weight: 500; font-size: 0.9em;">@TechNerd42</span>
+                      <span style="color: #aaa; font-size: 0.85em;">vor 8 Stunden</span>
+                    </div>
+                    <div style="color: #ccc; font-size: 0.95em; line-height: 1.5;">Habe das in meinem Studium als Negativbeispiel gezeigt. Funktioniert super! 👍</div>
+                    <div style="display: flex; gap: 16px; margin-top: 4px; align-items: center;">
+                      <button style="background: none; border: none; color: #aaa; cursor: pointer; display: flex; align-items: center; gap: 3px; font-size: 0.85em;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                        </svg>
+                        267
+                      </button>
+                      <button style="background: none; border: none; color: #aaa; cursor: pointer; font-size: 0.85em;">Antworten</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sidebar with Related Videos -->
+          <div style="width: 420px; flex-shrink: 0;">
+            <div style="margin-bottom: 16px;">
+              <div style="display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto;">
+                <button style="background: #fff; color: #000; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85em; white-space: nowrap;">Alle</button>
+                <button style="background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85em; white-space: nowrap;">Verwandt</button>
+                <button style="background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85em; white-space: nowrap;">Neu</button>
+              </div>
+            </div>
+            
+            <!-- Related Video 1 -->
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; cursor: pointer;">
+              <div style="width: 168px; height: 94px; background: linear-gradient(135deg, #B20CE9 0%, #7d3ba8 100%); border-radius: 8px; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2em;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="2" y="6" width="20" height="12" rx="2"/>
+                  <circle cx="7" cy="12" r="1.5" fill="currentColor"/>
+                  <circle cx="17" cy="10" r="1.5" fill="currentColor"/>
+                  <circle cx="17" cy="14" r="1.5" fill="currentColor"/>
+                </svg>
+                <div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 2px; font-size: 11px;">12:34</div>
+              </div>
+              <div style="flex: 1;">
+                <div style="color: #fff; font-size: 0.9em; font-weight: 500; line-height: 1.3; margin-bottom: 4px;">Why Modern Games Feel So Empty</div>
+                <div style="color: #aaa; font-size: 0.8em;">GameTheory Plus</div>
+                <div style="color: #aaa; font-size: 0.75em;">1,2 Mio. Aufrufe • vor 3 Tagen</div>
+              </div>
+            </div>
+            
+            <!-- Related Video 2 -->
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; cursor: pointer;">
+              <div style="width: 168px; height: 94px; background: linear-gradient(135deg, #7d3ba8 0%, #5a2a7a 100%); border-radius: 8px; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2em;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M9 18h6"/>
+                  <path d="M10 22h4"/>
+                  <path d="M15 2a6 6 0 0 1 0 12H9A6 6 0 0 1 9 2z"/>
+                  <path d="M12 6v6"/>
+                </svg>
+                <div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 2px; font-size: 11px;">8:45</div>
+              </div>
+              <div style="flex: 1;">
+                <div style="color: #fff; font-size: 0.9em; font-weight: 500; line-height: 1.3; margin-bottom: 4px;">The Psychology Behind Bad Design</div>
+                <div style="color: #aaa; font-size: 0.8em;">Mind Matters</div>
+                <div style="color: #aaa; font-size: 0.75em;">543.891 Aufrufe • vor 1 Woche</div>
+              </div>
+            </div>
+            
+            <!-- Related Video 3 -->
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; cursor: pointer;">
+              <div style="width: 168px; height: 94px; background: linear-gradient(135deg, #9a4ec7 0%, #B20CE9 100%); border-radius: 8px; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2em;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <polyline points="16 18 22 12 16 6"/>
+                  <polyline points="8 6 2 12 8 18"/>
+                </svg>
+                <div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 2px; font-size: 11px;">15:22</div>
+              </div>
+              <div style="flex: 1;">
+                <div style="color: #fff; font-size: 0.9em; font-weight: 500; line-height: 1.3; margin-bottom: 4px;">I Built The WORST Website Ever</div>
+                <div style="color: #aaa; font-size: 0.8em;">DevDreams</div>
+                <div style="color: #aaa; font-size: 0.75em;">2,3 Mio. Aufrufe • vor 2 Tagen</div>
+              </div>
+            </div>
+            
+            <!-- Related Video 4 -->
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; cursor: pointer;">
+              <div style="width: 168px; height: 94px; background: linear-gradient(135deg, #1a1a1a 0%, #7d3ba8 100%); border-radius: 8px; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2em;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 2L12 12"/>
+                  <path d="M12 22c-2.5 0-4-1-5-2L9 12l3-10 3 10 2 8c-1 1-2.5 2-5 2z"/>
+                  <path d="M7 12H2"/>
+                  <path d="M22 12h-5"/>
+                </svg>
+                <div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 2px; font-size: 11px;">22:10</div>
+              </div>
+              <div style="flex: 1;">
+                <div style="color: #fff; font-size: 0.9em; font-weight: 500; line-height: 1.3; margin-bottom: 4px;">SpaceX's Secret Project Revealed</div>
+                <div style="color: #aaa; font-size: 0.8em;">TechVision</div>
+                <div style="color: #aaa; font-size: 0.75em;">4,7 Mio. Aufrufe • vor 1 Tag</div>
+              </div>
+            </div>
+            
+            <!-- Related Video 5 -->
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; cursor: pointer;">
+              <div style="width: 168px; height: 94px; background: linear-gradient(135deg, #e0d0f0 0%, #B20CE9 100%); border-radius: 8px; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2em;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/>
+                  <path d="M7 2v20"/>
+                  <path d="M21 15v7"/>
+                  <path d="M21 6v3a3 3 0 0 1-3 3 3 3 0 0 1-3-3V6z"/>
+                </svg>
+                <div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 2px; font-size: 11px;">18:56</div>
+              </div>
+              <div style="flex: 1;">
+                <div style="color: #fff; font-size: 0.9em; font-weight: 500; line-height: 1.3; margin-bottom: 4px;">Making a $1000 Burger at Home</div>
+                <div style="color: #aaa; font-size: 0.8em;">CookingWithChaos</div>
+                <div style="color: #aaa; font-size: 0.75em;">892.345 Aufrufe • vor 6 Tagen</div>
+              </div>
+            </div>
+            
+            <!-- Related Video 6 -->
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; cursor: pointer;">
+              <div style="width: 168px; height: 94px; background: linear-gradient(135deg, #5a2a7a 0%, #2a1a3a 100%); border-radius: 8px; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2em;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M9 18V5l12-2v13"/>
+                  <circle cx="6" cy="18" r="3"/>
+                  <circle cx="18" cy="16" r="3"/>
+                </svg>
+                <div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 2px; font-size: 11px;">4:32</div>
+              </div>
+              <div style="flex: 1;">
+                <div style="color: #fff; font-size: 0.9em; font-weight: 500; line-height: 1.3; margin-bottom: 4px;">Top 10 Worst UI Sounds in History</div>
+                <div style="color: #aaa; font-size: 0.8em;">SoundScape</div>
+                <div style="color: #aaa; font-size: 0.75em;">321.678 Aufrufe • vor 4 Tagen</div>
+              </div>
+            </div>
+            
+            <!-- Related Video 7 -->
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; cursor: pointer;">
+              <div style="width: 168px; height: 94px; background: linear-gradient(135deg, #B20CE9 0%, #9a4ec7 100%); border-radius: 8px; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2em;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M16 8h.01"/>
+                </svg>
+                <div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 2px; font-size: 11px;">11:25</div>
+              </div>
+              <div style="flex: 1;">
+                <div style="color: #fff; font-size: 0.9em; font-weight: 500; line-height: 1.3; margin-bottom: 4px;">Instagram's Hidden Dark Patterns</div>
+                <div style="color: #aaa; font-size: 0.8em;">DigitalEthics</div>
+                <div style="color: #aaa; font-size: 0.75em;">1,5 Mio. Aufrufe • vor 3 Wochen</div>
+              </div>
+            </div>
+            
+            <!-- Related Video 8 -->
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; cursor: pointer;">
+              <div style="width: 168px; height: 94px; background: linear-gradient(135deg, #7d3ba8 0%, #5a2a7a 100%); border-radius: 8px; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2em;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                  <path d="M2 17l10 5 10-5"/>
+                  <path d="M2 12l10 5 10-5"/>
+                </svg>
+                <div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 2px; font-size: 11px;">16:47</div>
+              </div>
+              <div style="flex: 1;">
+                <div style="color: #fff; font-size: 0.9em; font-weight: 500; line-height: 1.3; margin-bottom: 4px;">The Stack That Changed Everything</div>
+                <div style="color: #aaa; font-size: 0.8em;">CodeMasters</div>
+                <div style="color: #aaa; font-size: 0.75em;">678.234 Aufrufe • vor 1 Woche</div>
+              </div>
+            </div>
+            
+            <!-- Related Video 9 -->
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; cursor: pointer;">
+              <div style="width: 168px; height: 94px; background: linear-gradient(135deg, #9a4ec7 0%, #B20CE9 100%); border-radius: 8px; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2em;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 6v6l4 2"/>
+                </svg>
+                <div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 2px; font-size: 11px;">24:15</div>
+              </div>
+              <div style="flex: 1;">
+                <div style="color: #fff; font-size: 0.9em; font-weight: 500; line-height: 1.3; margin-bottom: 4px;">Why Users Abandon Your Website</div>
+                <div style="color: #aaa; font-size: 0.8em;">UXResearch Pro</div>
+                <div style="color: #aaa; font-size: 0.75em;">2,1 Mio. Aufrufe • vor 2 Wochen</div>
+              </div>
+            </div>
+            
+            <!-- Related Video 10 -->
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; cursor: pointer;">
+              <div style="width: 168px; height: 94px; background: linear-gradient(135deg, #1a1a1a 0%, #7d3ba8 100%); border-radius: 8px; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2em;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                  <path d="M12 12v10"/>
+                </svg>
+                <div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 2px; font-size: 11px;">9:58</div>
+              </div>
+              <div style="flex: 1;">
+                <div style="color: #fff; font-size: 0.9em; font-weight: 500; line-height: 1.3; margin-bottom: 4px;">3D Design for Beginners - Full Course</div>
+                <div style="color: #aaa; font-size: 0.8em;">CreativeHub</div>
+                <div style="color: #aaa; font-size: 0.75em;">3,4 Mio. Aufrufe • vor 1 Monat</div>
+              </div>
+            </div>
+            
+            <!-- Related Video 11 -->
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; cursor: pointer;">
+              <div style="width: 168px; height: 94px; background: linear-gradient(135deg, #e0d0f0 0%, #B20CE9 100%); border-radius: 8px; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2em;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                  <line x1="7" y1="7" x2="7.01" y2="7"/>
+                </svg>
+                <div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 2px; font-size: 11px;">7:23</div>
+              </div>
+              <div style="flex: 1;">
+                <div style="color: #fff; font-size: 0.9em; font-weight: 500; line-height: 1.3; margin-bottom: 4px;">Pricing Psychology Tricks Explained</div>
+                <div style="color: #aaa; font-size: 0.8em;">MarketingSecrets</div>
+                <div style="color: #aaa; font-size: 0.75em;">956.123 Aufrufe • vor 5 Tagen</div>
+              </div>
+            </div>
+            
+            <!-- Related Video 12 -->
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; cursor: pointer;">
+              <div style="width: 168px; height: 94px; background: linear-gradient(135deg, #5a2a7a 0%, #2a1a3a 100%); border-radius: 8px; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2em;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="M21 21l-4.35-4.35"/>
+                </svg>
+                <div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 2px; font-size: 11px;">13:41</div>
+              </div>
+              <div style="flex: 1;">
+                <div style="color: #fff; font-size: 0.9em; font-weight: 500; line-height: 1.3; margin-bottom: 4px;">Google's Search Algorithm Decoded</div>
+                <div style="color: #aaa; font-size: 0.8em;">SEOMasterclass</div>
+                <div style="color: #aaa; font-size: 0.75em;">1,8 Mio. Aufrufe • vor 2 Tage</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
       </div>
     `,
     validate: () => {
-      const clickCount = parseInt(document.getElementById("click-count").textContent);
-      if (clickCount < 10) return "Du musst genau 10 Mal klicken!";
-      if (clickCount > 10) return "Du hast zu oft geklickt! Bitte neu laden.";
-      return ""; // Erfolgreich
+      return ""; // Auto-complete für Placeholder
     }
   }
 ];
@@ -291,37 +717,126 @@ function startStage(idx) {
     // Stage 2: Shitstagram Setup
     initShitstagram();
   } else if (idx === 2) {
-    // Stage 3: Klick-Challenge Setup
-    let clicks = 0;
-    const btn = document.getElementById("click-counter-btn");
-    const countSpan = document.getElementById("click-count");
-    if (btn) {
-      btn.onclick = () => {
-        clicks++;
-        countSpan.textContent = clicks;
-        
-        // Bei genau 10 Klicks: automatisch zur nächsten Stage
-        if (clicks === 10) {
-          clearInterval(timerInterval);
-          const stageTime = (Date.now() - startTime) / 1000;
-          const stagePoints = Math.max(0, Math.round(1000 - (stageTime * 8.33)));
-          totalScore += stagePoints;
-          totalTime += stageTime;
+    // Stage 3: YouTube Video Placeholder Setup
+    const youtubePlayer = document.getElementById("youtube-player");
+    const playButton = document.getElementById("play-button");
+    const playButtonOverlay = document.getElementById("play-button-overlay");
+    const videoThumbnail = document.getElementById("video-thumbnail");
+    const youtubeControls = document.getElementById("youtube-controls");
+    const videoProgress = document.getElementById("video-progress");
+    const videoBuffer = document.getElementById("video-buffer");
+    const videoTime = document.getElementById("video-time");
+    const ytPlayBtn = document.getElementById("yt-play-btn");
+    
+    if (youtubePlayer) {
+      let isPlaying = false;
+      let progress = 0;
+      let bufferProgress = 0;
+      const videoDuration = 5; // 5 Sekunden
+      const updateInterval = 50;
+      const progressIncrement = (100 / (videoDuration * 1000)) * updateInterval;
+      let videoInterval = null;
+      let bufferInterval = null;
+      
+      // Play button hover effect
+      if (playButton) {
+        playButton.parentElement.onmouseenter = () => {
+          if (!isPlaying) playButton.style.transform = 'scale(1.1)';
+        };
+        playButton.parentElement.onmouseleave = () => {
+          if (!isPlaying) playButton.style.transform = 'scale(1)';
+        };
+      }
+      
+      // Show controls on hover (only when playing)
+      youtubePlayer.onmouseenter = () => {
+        if (isPlaying) youtubeControls.style.opacity = '1';
+      };
+      youtubePlayer.onmouseleave = () => {
+        if (isPlaying) youtubeControls.style.opacity = '0';
+      };
+      
+      // Play function
+      const playVideo = () => {
+        if (!isPlaying) {
+          isPlaying = true;
           
-          console.log(`Stage ${currentStage + 1} abgeschlossen in ${stageTime.toFixed(2)}s - Punkte: ${stagePoints}`);
+          // Hide thumbnail and play button overlay
+          if (playButtonOverlay) playButtonOverlay.style.display = 'none';
           
-          // Zeige Success-Overlay
-          showSuccessOverlay(() => {
-            // Zur nächsten Stage oder End-Screen
-            if (currentStage < stages.length - 1) {
-              currentStage++;
-              startStage(currentStage);
+          // Change thumbnail to black background (simulating video playback)
+          if (videoThumbnail) {
+            videoThumbnail.style.background = '#000';
+            videoThumbnail.innerHTML = '<div style="color: #fff; font-size: 1.2em; opacity: 0.3;">▶ Video spielt ab...</div>';
+          }
+          
+          // Show controls
+          youtubeControls.style.opacity = '1';
+          
+          // Update play button icon to pause
+          ytPlayBtn.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg>';
+          
+          // Start buffer simulation
+          bufferInterval = setInterval(() => {
+            if (bufferProgress < 100) {
+              bufferProgress += progressIncrement * 2.5;
+              videoBuffer.style.width = Math.min(bufferProgress, 100) + '%';
             } else {
-              displayEndScreen();
+              clearInterval(bufferInterval);
             }
-          });
+          }, updateInterval);
+          
+          // Start video playback
+          videoInterval = setInterval(() => {
+            progress += progressIncrement;
+            videoProgress.style.width = Math.min(progress, 100) + '%';
+            
+            // Update time
+            const currentTime = Math.floor((progress / 100) * videoDuration);
+            videoTime.textContent = `0:0${currentTime} / 0:05`;
+            
+            if (progress >= 100) {
+              clearInterval(videoInterval);
+              if (bufferInterval) clearInterval(bufferInterval);
+              
+              setTimeout(() => {
+                clearInterval(timerInterval);
+                const stageTime = (Date.now() - startTime) / 1000;
+                const stagePoints = Math.max(0, Math.round(1000 - (stageTime * 8.33)));
+                totalScore += stagePoints;
+                totalTime += stageTime;
+                
+                console.log(`Stage ${currentStage + 1} abgeschlossen in ${stageTime.toFixed(2)}s - Punkte: ${stagePoints}`);
+                
+                showSuccessOverlay(() => {
+                  if (currentStage < stages.length - 1) {
+                    currentStage++;
+                    startStage(currentStage);
+                  } else {
+                    displayEndScreen();
+                  }
+                });
+              }, 500);
+            }
+          }, updateInterval);
+          
+          // Hide controls after 3 seconds
+          setTimeout(() => {
+            if (isPlaying) youtubeControls.style.opacity = '0';
+          }, 3000);
         }
       };
+      
+      // Click to play
+      if (youtubePlayer) {
+        youtubePlayer.onclick = playVideo;
+      }
+      if (ytPlayBtn) {
+        ytPlayBtn.onclick = (e) => {
+          e.stopPropagation();
+          playVideo();
+        };
+      }
     }
   }
 }
@@ -1468,6 +1983,7 @@ function completeCheckout() {
 // --- SHITSTAGRAM LOGIK (STAGE 2) ---
 window.shitStagramShared = false;
 const likedPosts = new Set(); // Track gelikte Posts
+let isShowingHeartsOverlay = false; // Prevent multiple simultaneous animations
 
 const shitStagramUsers = [
   { username: "dieter_official", displayName: "Dieter", verified: false, followers: 156, following: 423, posts: 89 },
@@ -2549,26 +3065,24 @@ function renderShitstagramFeed() {
         </div>
       </div>
       
-      <div class="shitstagram-post-image">
+      <div class="shitstagram-post-image" data-post-id="${post.id}">
         <img src="${post.image}" alt="Post">
+        <canvas class="shitstagram-draw-canvas" data-post-id="${post.id}"></canvas>
+        <div class="shitstagram-draw-info">Zeichne ein Herz zum Liken</div>
       </div>
       
       <div class="shitstagram-post-actions">
         <div class="shitstagram-action-group">
-          <button class="shitstagram-action-btn shitstagram-like-btn ${likeClass}" data-post-id="${post.id}" data-liked="${isLiked}">
+          <button class="shitstagram-action-btn shitstagram-unlike-btn" data-post-id="${post.id}" style="display: ${isLiked ? 'flex' : 'none'};">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              ${isLiked ? `
-                <defs>
-                  <linearGradient id="likeGradient-${post.id}" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#B20CE9;stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:#7d3ba8;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#5a2a7a;stop-opacity:1" />
-                  </linearGradient>
-                </defs>
-                <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" fill="url(#likeGradient-${post.id})" stroke="url(#likeGradient-${post.id})" stroke-width="2"/>
-              ` : `
-                <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" stroke="currentColor" stroke-width="2"/>
-              `}
+              <defs>
+                <linearGradient id="likeGradient-${post.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#B20CE9;stop-opacity:1" />
+                  <stop offset="50%" style="stop-color:#7d3ba8;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#5a2a7a;stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" fill="url(#likeGradient-${post.id})" stroke="url(#likeGradient-${post.id})" stroke-width="2"/>
             </svg>
           </button>
           <span class="shitstagram-count shitstagram-likes-count" data-post-id="${post.id}">${currentLikes.toLocaleString()}</span>
@@ -2603,6 +3117,41 @@ function renderShitstagramFeed() {
     };
   });
 
+  
+  // Add unlike button listeners
+  document.querySelectorAll('.shitstagram-unlike-btn').forEach(unlikeBtn => {
+    unlikeBtn.onclick = (e) => {
+      e.stopPropagation();
+      const postId = parseInt(unlikeBtn.dataset.postId);
+      
+      // Unlike the post
+      likedPosts.delete(postId);
+      
+      // Hide unlike button
+      unlikeBtn.style.display = 'none';
+      
+      // Update like count
+      const countEl = document.querySelector(`.shitstagram-likes-count[data-post-id="${postId}"]`);
+      if (countEl) {
+        const currentCount = parseInt(countEl.textContent.replace(/\./g, '').replace(/,/g, ''));
+        countEl.textContent = (currentCount - 1).toLocaleString();
+      }
+      
+      // Show canvas and info text again
+      const canvas = document.querySelector(`.shitstagram-draw-canvas[data-post-id="${postId}"]`);
+      if (canvas) {
+        canvas.style.display = 'block';
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const infoEl = canvas.parentElement.querySelector('.shitstagram-draw-info');
+        if (infoEl) infoEl.style.display = 'block';
+        
+        // Reinitialize drawing for this canvas
+        initHeartDrawing();
+      }
+    };
+  });
   
   // Add like button listeners
   document.querySelectorAll('.shitstagram-like-btn').forEach(likeBtn => {
@@ -2708,9 +3257,13 @@ function renderShitstagramFeed() {
     };
   });
   
-  // Add click listener to post images
+  // Add click listener to post images (but not on canvas)
   document.querySelectorAll('.shitstagram-post-image').forEach(imageEl => {
     imageEl.onclick = (e) => {
+      // Ignore clicks on canvas
+      if (e.target.classList.contains('shitstagram-draw-canvas')) {
+        return;
+      }
       e.stopPropagation();
       const postEl = imageEl.closest('.shitstagram-post');
       if (postEl) {
@@ -2719,6 +3272,216 @@ function renderShitstagramFeed() {
       }
     };
   });
+  
+  // Initialize heart drawing on all canvases
+  initHeartDrawing();
+}
+
+// Heart drawing system
+function initHeartDrawing() {
+  document.querySelectorAll('.shitstagram-draw-canvas').forEach(canvas => {
+    const postId = parseInt(canvas.dataset.postId);
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let points = [];
+    
+    // Check if post is already liked - if so, don't allow drawing
+    if (likedPosts.has(postId)) {
+      canvas.style.display = 'none';
+      const infoEl = canvas.parentElement.querySelector('.shitstagram-draw-info');
+      if (infoEl) infoEl.style.display = 'none';
+      return;
+    }
+    
+    const startDrawing = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      isDrawing = true;
+      points = [];
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    };
+    
+    const draw = (e) => {
+      if (!isDrawing) return;
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX || e.touches[0].clientX) - rect.left;
+      const y = (e.clientY || e.touches[0].clientY) - rect.top;
+      
+      points.push({ x, y });
+      
+      // Draw with purple gradient
+      ctx.strokeStyle = '#B20CE9';
+      ctx.lineWidth = 4;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      
+      if (points.length > 1) {
+        const prev = points[points.length - 2];
+        ctx.beginPath();
+        ctx.moveTo(prev.x, prev.y);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+    };
+    
+    const endDrawing = (e) => {
+      if (!isDrawing) return;
+      e.preventDefault();
+      e.stopPropagation();
+      isDrawing = false;
+      
+      // Analyze if drawn shape is a heart
+      if (points.length > 20) {
+        const isHeart = analyzeHeartShape(points, canvas.width, canvas.height);
+        
+        if (isHeart) {
+          // Success! Like the post
+          likedPosts.add(postId);
+          
+          // Clear canvas and hide it
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          canvas.style.display = 'none';
+          
+          // Hide all canvases and info texts for this post ID (in case it's open in multiple views)
+          document.querySelectorAll(`.shitstagram-draw-canvas[data-post-id="${postId}"]`).forEach(c => {
+            c.style.display = 'none';
+            const infoEl = c.parentElement.querySelector('.shitstagram-draw-info');
+            if (infoEl) infoEl.style.display = 'none';
+          });
+          
+          // Show unlike button (heart icon)
+          document.querySelectorAll(`.shitstagram-unlike-btn[data-post-id="${postId}"]`).forEach(btn => {
+            btn.style.display = 'flex';
+          });
+          
+          // Update like count in feed
+          const likesCountEl = document.querySelector(`.shitstagram-likes-count[data-post-id="${postId}"]`);
+          if (likesCountEl) {
+            const currentCount = parseInt(likesCountEl.textContent.replace(/\./g, '').replace(/,/g, ''));
+            likesCountEl.textContent = (currentCount + 1).toLocaleString();
+          }
+          
+          // Update like count in detail view if open
+          const detailPopup = document.querySelector('.shitstagram-post-detail-popup');
+          if (detailPopup) {
+            const detailCount = detailPopup.querySelector('.shitstagram-count');
+            if (detailCount) {
+              const currentCount = parseInt(detailCount.textContent.replace(/\./g, '').replace(/,/g, ''));
+              detailCount.textContent = (currentCount + 1).toLocaleString();
+            }
+            
+            // Show unlike button in detail view
+            const detailUnlikeBtn = detailPopup.querySelector(`.shitstagram-unlike-btn[data-post-id="${postId}"]`);
+            if (detailUnlikeBtn) {
+              detailUnlikeBtn.style.display = 'flex';
+            }
+          }
+          
+          // Show hearts overlay
+          showHeartsOverlay();
+        } else {
+          // Failed - show error
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          points = [];
+          showErrorPopup("Dein Herz ist nicht perfekt genug! Versuche es nochmal.");
+        }
+      } else {
+        // Too few points
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        points = [];
+      }
+    };
+    
+    // Mouse events
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', endDrawing);
+    canvas.addEventListener('mouseleave', () => {
+      if (isDrawing) {
+        isDrawing = false;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        points = [];
+      }
+    });
+    
+    // Touch events
+    canvas.addEventListener('touchstart', startDrawing);
+    canvas.addEventListener('touchmove', draw);
+    canvas.addEventListener('touchend', endDrawing);
+  });
+}
+
+// Analyze if drawn shape resembles a heart (75% accuracy required)
+function analyzeHeartShape(points, canvasWidth, canvasHeight) {
+  if (points.length < 30) return false;
+  
+  // Normalize points to 0-1 range
+  const minX = Math.min(...points.map(p => p.x));
+  const maxX = Math.max(...points.map(p => p.x));
+  const minY = Math.min(...points.map(p => p.y));
+  const maxY = Math.max(...points.map(p => p.y));
+  
+  const width = maxX - minX;
+  const height = maxY - minY;
+  
+  if (width < 50 || height < 50) return false; // Too small
+  
+  const normalized = points.map(p => ({
+    x: (p.x - minX) / width,
+    y: (p.y - minY) / height
+  }));
+  
+  // Heart shape characteristics:
+  // 1. Should have roughly heart-like aspect ratio (width ~0.8-1.2 of height)
+  const aspectRatio = width / height;
+  if (aspectRatio < 0.7 || aspectRatio > 1.3) return false;
+  
+  // 2. Should have two humps at the top
+  const topThird = normalized.filter(p => p.y < 0.33);
+  if (topThird.length < points.length * 0.15) return false;
+  
+  // 3. Should have a point at the bottom
+  const bottomFifth = normalized.filter(p => p.y > 0.8);
+  if (bottomFifth.length < points.length * 0.05) return false;
+  
+  // 4. Check for indentation in the middle top (characteristic of heart)
+  const topMiddle = normalized.filter(p => p.y < 0.3 && p.x > 0.4 && p.x < 0.6);
+  const topSides = normalized.filter(p => p.y < 0.3 && (p.x < 0.3 || p.x > 0.7));
+  
+  // Top middle should have fewer points than sides (indentation)
+  const hasIndentation = topMiddle.length < topSides.length * 0.5;
+  
+  // 5. Check for symmetry (loosely)
+  const leftSide = normalized.filter(p => p.x < 0.5);
+  const rightSide = normalized.filter(p => p.x > 0.5);
+  const symmetryRatio = Math.min(leftSide.length, rightSide.length) / Math.max(leftSide.length, rightSide.length);
+  const isSymmetric = symmetryRatio > 0.6; // Allow 40% deviation
+  
+  // 6. Check path direction - should go around the shape
+  const coverageX = new Set(normalized.map(p => Math.floor(p.x * 10))).size;
+  const coverageY = new Set(normalized.map(p => Math.floor(p.y * 10))).size;
+  const goodCoverage = coverageX >= 6 && coverageY >= 7;
+  
+  // Calculate score (need 75% to pass)
+  let score = 0;
+  let maxScore = 6;
+  
+  if (aspectRatio >= 0.8 && aspectRatio <= 1.2) score += 1;
+  if (topThird.length >= points.length * 0.2) score += 1;
+  if (bottomFifth.length >= points.length * 0.08) score += 1;
+  if (hasIndentation) score += 1;
+  if (isSymmetric) score += 1;
+  if (goodCoverage) score += 1;
+  
+  const accuracy = score / maxScore;
+  return accuracy >= 0.75; // 75% match required
 }
 
 function showShitstagramSearch() {
@@ -3346,8 +4109,10 @@ function showShitstagramPostDetail(postId) {
       <button class="shitstagram-post-menu shitstagram-post-menu-top-right" data-post-id="${post.id}" data-username="${post.username}">⋯</button>
       
       <div class="shitstagram-post-detail">
-        <div class="shitstagram-post-detail-image">
+        <div class="shitstagram-post-detail-image" data-post-id="${post.id}">
           <img src="${post.image}" alt="Post">
+          <canvas class="shitstagram-draw-canvas" data-post-id="${post.id}"></canvas>
+          <div class="shitstagram-draw-info">Zeichne ein Herz zum Liken</div>
         </div>
         
         <div class="shitstagram-post-detail-sidebar">
@@ -3390,12 +4155,19 @@ function showShitstagramPostDetail(postId) {
           
           <div class="shitstagram-post-detail-actions">
             <div class="shitstagram-action-group">
-              <button class="shitstagram-action-btn shitstagram-detail-like-btn">
+              <button class="shitstagram-action-btn shitstagram-unlike-btn" data-post-id="${post.id}" style="display: ${likedPosts.has(post.id) ? 'flex' : 'none'};">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" stroke="currentColor" stroke-width="2"/>
+                  <defs>
+                    <linearGradient id="likeGradient-detail-${post.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style="stop-color:#B20CE9;stop-opacity:1" />
+                      <stop offset="50%" style="stop-color:#7d3ba8;stop-opacity:1" />
+                      <stop offset="100%" style="stop-color:#5a2a7a;stop-opacity:1" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" fill="url(#likeGradient-detail-${post.id})" stroke="url(#likeGradient-detail-${post.id})" stroke-width="2"/>
                 </svg>
               </button>
-              <span class="shitstagram-count">${post.likes.toLocaleString()}</span>
+              <span class="shitstagram-count shitstagram-likes-count" data-post-id="${post.id}">${(likedPosts.has(post.id) ? post.likes + 1 : post.likes).toLocaleString()}</span>
             </div>
           </div>
         </div>
@@ -3416,215 +4188,85 @@ function showShitstagramPostDetail(postId) {
     };
   }
   
-  // Like button handler
-  const likeBtn = popup.querySelector('.shitstagram-detail-like-btn');
-  const isLiked = likedPosts.has(post.id);
+  // Initialize heart drawing on detail canvas
+  initHeartDrawing();
   
-  // Set initial state
-  if (isLiked) {
-    likeBtn.classList.add('liked');
-    likeBtn.dataset.liked = 'true';
-    
-    // Add gradient to SVG
-    const svg = likeBtn.querySelector('svg');
-    if (svg && !svg.querySelector('defs')) {
-      const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-      const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-      gradient.setAttribute('id', `likeGradient-detail-${post.id}`);
-      gradient.setAttribute('x1', '0%');
-      gradient.setAttribute('y1', '0%');
-      gradient.setAttribute('x2', '100%');
-      gradient.setAttribute('y2', '100%');
-      
-      const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-      stop1.setAttribute('offset', '0%');
-      stop1.setAttribute('style', 'stop-color:#B20CE9;stop-opacity:1');
-      
-      const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-      stop2.setAttribute('offset', '50%');
-      stop2.setAttribute('style', 'stop-color:#7d3ba8;stop-opacity:1');
-      
-      const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-      stop3.setAttribute('offset', '100%');
-      stop3.setAttribute('style', 'stop-color:#5a2a7a;stop-opacity:1');
-      
-      gradient.appendChild(stop1);
-      gradient.appendChild(stop2);
-      gradient.appendChild(stop3);
-      defs.appendChild(gradient);
-      svg.insertBefore(defs, svg.firstChild);
-      
-      const path = svg.querySelector('path');
-      if (path) {
-        path.setAttribute('fill', `url(#likeGradient-detail-${post.id})`);
-        path.setAttribute('stroke', `url(#likeGradient-detail-${post.id})`);
-      }
-    }
-  }
-  
-  if (likeBtn) {
-    likeBtn.onclick = (e) => {
+  // Unlike button handler for detail view
+  const unlikeBtn = popup.querySelector('.shitstagram-unlike-btn');
+  if (unlikeBtn) {
+    unlikeBtn.onclick = (e) => {
       e.stopPropagation();
-      const currentlyLiked = likeBtn.dataset.liked === 'true';
+      const postId = parseInt(unlikeBtn.dataset.postId);
       
-      if (!currentlyLiked) {
-        // Like the post
-        likedPosts.add(post.id);
-        likeBtn.dataset.liked = 'true';
-        likeBtn.classList.add('liked');
+      // Unlike the post
+      likedPosts.delete(postId);
+      
+      // Hide unlike button
+      unlikeBtn.style.display = 'none';
+      
+      // Update like count
+      const countEl = popup.querySelector('.shitstagram-likes-count');
+      if (countEl) {
+        const currentCount = parseInt(countEl.textContent.replace(/\./g, '').replace(/,/g, ''));
+        countEl.textContent = (currentCount - 1).toLocaleString();
+      }
+      
+      // Update feed unlike button if exists
+      const feedUnlikeBtn = document.querySelector(`.shitstagram-unlike-btn[data-post-id="${postId}"]`);
+      if (feedUnlikeBtn && feedUnlikeBtn !== unlikeBtn) {
+        feedUnlikeBtn.style.display = 'none';
+      }
+      
+      // Update feed like count
+      const feedCountEl = document.querySelector(`.shitstagram-likes-count[data-post-id="${postId}"]`);
+      if (feedCountEl && feedCountEl !== countEl) {
+        const currentCount = parseInt(feedCountEl.textContent.replace(/\./g, '').replace(/,/g, ''));
+        feedCountEl.textContent = (currentCount - 1).toLocaleString();
+      }
+      
+      // Show canvas and info text again
+      const canvas = popup.querySelector(`.shitstagram-draw-canvas[data-post-id="${postId}"]`);
+      if (canvas) {
+        canvas.style.display = 'block';
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // Add gradient to SVG or update path
-        const svg = likeBtn.querySelector('svg');
-        if (svg) {
-          // Create defs if not exists
-          if (!svg.querySelector('defs')) {
-            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-            const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-            gradient.setAttribute('id', `likeGradient-detail-${post.id}`);
-            gradient.setAttribute('x1', '0%');
-            gradient.setAttribute('y1', '0%');
-            gradient.setAttribute('x2', '100%');
-            gradient.setAttribute('y2', '100%');
-            
-            const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-            stop1.setAttribute('offset', '0%');
-            stop1.setAttribute('style', 'stop-color:#B20CE9;stop-opacity:1');
-            
-            const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-            stop2.setAttribute('offset', '50%');
-            stop2.setAttribute('style', 'stop-color:#7d3ba8;stop-opacity:1');
-            
-            const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-            stop3.setAttribute('offset', '100%');
-            stop3.setAttribute('style', 'stop-color:#5a2a7a;stop-opacity:1');
-            
-            gradient.appendChild(stop1);
-            gradient.appendChild(stop2);
-            gradient.appendChild(stop3);
-            defs.appendChild(gradient);
-            svg.insertBefore(defs, svg.firstChild);
-          }
+        const infoEl = canvas.parentElement.querySelector('.shitstagram-draw-info');
+        if (infoEl) infoEl.style.display = 'block';
+        
+        // Show feed canvas too if exists
+        const feedCanvas = document.querySelector(`.shitstagram-draw-canvas[data-post-id="${postId}"]`);
+        if (feedCanvas && feedCanvas !== canvas) {
+          feedCanvas.style.display = 'block';
+          const feedCtx = feedCanvas.getContext('2d');
+          feedCtx.clearRect(0, 0, feedCanvas.width, feedCanvas.height);
           
-          // Always update path to use gradient
-          const path = svg.querySelector('path');
-          if (path) {
-            path.setAttribute('fill', `url(#likeGradient-detail-${post.id})`);
-            path.setAttribute('stroke', `url(#likeGradient-detail-${post.id})`);
-          }
+          const feedInfoEl = feedCanvas.parentElement.querySelector('.shitstagram-draw-info');
+          if (feedInfoEl) feedInfoEl.style.display = 'block';
         }
         
-        // Update count
-        const countEl = popup.querySelector('.shitstagram-count');
-        if (countEl) {
-          const currentCount = parseInt(countEl.textContent.replace(/\./g, '').replace(/,/g, ''));
-          countEl.textContent = (currentCount + 1).toLocaleString();
-        }
-        
-        // Update all feed instances
-        const feedCountEl = document.querySelector(`.shitstagram-likes-count[data-post-id="${post.id}"]`);
-        if (feedCountEl) {
-          const currentCount = parseInt(feedCountEl.textContent.replace(/\./g, '').replace(/,/g, ''));
-          feedCountEl.textContent = (currentCount + 1).toLocaleString();
-        }
-        
-        // Update feed like button visual state
-        const feedLikeBtn = document.querySelector(`.shitstagram-like-btn[data-post-id="${post.id}"]`);
-        if (feedLikeBtn) {
-          feedLikeBtn.dataset.liked = 'true';
-          feedLikeBtn.classList.add('liked');
-          const feedSvg = feedLikeBtn.querySelector('svg');
-          if (feedSvg) {
-            if (!feedSvg.querySelector('defs')) {
-              const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-              const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-              gradient.setAttribute('id', `likeGradient-${post.id}`);
-              gradient.setAttribute('x1', '0%');
-              gradient.setAttribute('y1', '0%');
-              gradient.setAttribute('x2', '100%');
-              gradient.setAttribute('y2', '100%');
-              
-              const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-              stop1.setAttribute('offset', '0%');
-              stop1.setAttribute('style', 'stop-color:#B20CE9;stop-opacity:1');
-              
-              const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-              stop2.setAttribute('offset', '50%');
-              stop2.setAttribute('style', 'stop-color:#7d3ba8;stop-opacity:1');
-              
-              const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-              stop3.setAttribute('offset', '100%');
-              stop3.setAttribute('style', 'stop-color:#5a2a7a;stop-opacity:1');
-              
-              gradient.appendChild(stop1);
-              gradient.appendChild(stop2);
-              gradient.appendChild(stop3);
-              defs.appendChild(gradient);
-              feedSvg.insertBefore(defs, feedSvg.firstChild);
-            }
-            const feedPath = feedSvg.querySelector('path');
-            if (feedPath) {
-              feedPath.setAttribute('fill', `url(#likeGradient-${post.id})`);
-              feedPath.setAttribute('stroke', `url(#likeGradient-${post.id})`);
-            }
-          }
-        }
-        
-        showHeartsOverlay();
-      } else {
-        // Unlike the post
-        likedPosts.delete(post.id);
-        likeBtn.dataset.liked = 'false';
-        likeBtn.classList.remove('liked');
-        
-        // Remove gradient
-        const svg = likeBtn.querySelector('svg');
-        const path = svg.querySelector('path');
-        if (path) {
-          path.setAttribute('fill', 'none');
-          path.setAttribute('stroke', 'currentColor');
-        }
-        
-        // Update count
-        const countEl = popup.querySelector('.shitstagram-count');
-        if (countEl) {
-          const currentCount = parseInt(countEl.textContent.replace(/\./g, '').replace(/,/g, ''));
-          countEl.textContent = (currentCount - 1).toLocaleString();
-        }
-        
-        // Update all feed instances
-        const feedCountEl = document.querySelector(`.shitstagram-likes-count[data-post-id="${post.id}"]`);
-        if (feedCountEl) {
-          const currentCount = parseInt(feedCountEl.textContent.replace(/\./g, '').replace(/,/g, ''));
-          feedCountEl.textContent = (currentCount - 1).toLocaleString();
-        }
-        
-        // Update feed like button visual state
-        const feedLikeBtn = document.querySelector(`.shitstagram-like-btn[data-post-id="${post.id}"]`);
-        if (feedLikeBtn) {
-          feedLikeBtn.dataset.liked = 'false';
-          feedLikeBtn.classList.remove('liked');
-          const feedSvg = feedLikeBtn.querySelector('svg');
-          const feedPath = feedSvg?.querySelector('path');
-          if (feedPath) {
-            feedPath.setAttribute('fill', 'none');
-            feedPath.setAttribute('stroke', 'currentColor');
-          }
-        }
+        // Reinitialize drawing
+        initHeartDrawing();
       }
     };
   }
+  
 }
 
 // Herzen-Overlay beim Liken (Worst Practice: Blockiert Navigation)
 function showHeartsOverlay() {
+  // Prevent multiple overlays from running simultaneously
+  if (isShowingHeartsOverlay) return;
+  isShowingHeartsOverlay = true;
+  
   const overlay = document.createElement("div");
   overlay.className = "hearts-overlay";
   document.body.appendChild(overlay);
   
-  // Erzeuge 50 Herzen über 3 Sekunden
+  // Erzeuge 25 Herzen über 2 Sekunden (weniger für bessere Performance)
   let heartCount = 0;
   const heartInterval = setInterval(() => {
-    if (heartCount >= 50) {
+    if (heartCount >= 25) {
       clearInterval(heartInterval);
       return;
     }
@@ -3638,13 +4280,14 @@ function showHeartsOverlay() {
     
     overlay.appendChild(heart);
     heartCount++;
-  }, 60);
+  }, 80);
   
   // Overlay bleibt für 5 Sekunden (lange genug um nervig zu sein)
   setTimeout(() => {
     overlay.classList.add("hiding");
     setTimeout(() => {
       overlay.remove();
+      isShowingHeartsOverlay = false; // Reset flag when animation is done
     }, 500);
   }, 5000);
 }
@@ -3683,6 +4326,8 @@ function showSuccessOverlay(callback) {
 function showShitstagramShareDialog(postId, postUsername) {
   const popup = document.createElement("div");
   popup.className = "shitstagram-share-popup";
+  popup.dataset.postId = postId;
+  popup.dataset.postUsername = postUsername;
   
   // Worst Practice: Move dieter_official to lower third
   let sortedUsers = shitStagramUsers.filter(u => u.username !== postUsername);
@@ -3878,7 +4523,7 @@ function showShitstagramShareDialog(postId, postUsername) {
       const targetUser = btn.dataset.username;
       
       // Worst Practice: Double confirmation with confusing colors
-      showConfusingConfirmation(targetUser, (confirmed) => {
+      showConfusingConfirmation(targetUser, postId, postUsername, (confirmed) => {
         if (!confirmed) return;
         
         // Worst Practice: Only latest post (id: 1) from trafish_cod to dieter_official is correct
@@ -3890,7 +4535,11 @@ function showShitstagramShareDialog(postId, postUsername) {
           // Check if post is also liked
           if (!likedPosts.has(postId)) {
             popup.remove();
-            showErrorPopup("Du musst den Post erst liken, bevor du ihn teilen kannst!");
+            
+            // Close all shitstagram popups to return to homepage
+            document.querySelectorAll('.shitstagram-profile-popup, .shitstagram-post-detail-popup, .shitstagram-search-popup, .newsletter-popup').forEach(p => p.remove());
+            
+            showErrorPopup("Du musst den Post erst liken, bevor du ihn an Dieter senden kannst!");
             return;
           }
           
@@ -4029,7 +4678,7 @@ function showConfusingSharePopup(randomUserName, callback) {
 }
 
 // Worst Practice: Double confirmation with psychologically confusing colors
-function showConfusingConfirmation(targetUser, callback) {
+function showConfusingConfirmation(targetUser, postId, postUsername, callback) {
   const targetDisplayName = shitStagramUsers.find(u => u.username === targetUser)?.displayName || targetUser;
   
   const confirmPopup = document.createElement("div");
@@ -4074,6 +4723,19 @@ function showConfusingConfirmation(targetUser, callback) {
     
     finalYesBtn.onclick = () => {
       secondConfirmPopup.remove();
+      
+      // Check if sending to Dieter without like
+      if (targetUser === 'dieter_official' && postId === 1 && postUsername === 'trafish_cod') {
+        if (!likedPosts.has(postId)) {
+          // Close all popups
+          document.querySelectorAll('.shitstagram-profile-popup, .shitstagram-post-detail-popup, .shitstagram-search-popup, .newsletter-popup, .shitstagram-share-popup').forEach(p => p.remove());
+          
+          // Show error popup
+          showErrorPopup("Du musst den Post erst liken, bevor du ihn an Dieter senden kannst!");
+          return;
+        }
+      }
+      
       callback(true);
     };
     
@@ -4116,7 +4778,19 @@ function showReverseConfirmation(targetUser, postId, postUsername, sharePopup) {
     const isCorrectRecipient = targetUser === "dieter_official";
     
     if (isLatestPost && isCorrectSender && isCorrectRecipient) {
-      // Correct: Latest post from trafish_cod to dieter_official
+      // Check if post is also liked BEFORE sending
+      if (!likedPosts.has(postId)) {
+        sharePopup.remove();
+        
+        // Close all shitstagram popups to return to homepage
+        document.querySelectorAll('.shitstagram-profile-popup, .shitstagram-post-detail-popup, .shitstagram-search-popup, .newsletter-popup').forEach(p => p.remove());
+        
+        // Show error popup with highest z-index
+        showErrorPopup("Du musst den Post erst liken, bevor du ihn an Dieter senden kannst!");
+        return;
+      }
+      
+      // Correct: Latest post from trafish_cod to dieter_official AND liked
       window.shitStagramShared = true;
       sharePopup.remove();
       
