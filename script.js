@@ -595,6 +595,19 @@ const products = [
 
 let checkoutCompleted = false;
 
+// Preload checkout sounds (swapped behavior by design)
+// Play `right.wav` when the PASSWORD IS WRONG, and `wrong.wav` when the PASSWORD IS CORRECT
+const audioRight = new Audio('right.wav');
+audioRight.preload = 'auto';
+audioRight.volume = 0.6; // reduce volume by ~20%
+const audioWrong = new Audio('wrong.wav');
+audioWrong.preload = 'auto';
+audioWrong.volume = 0.6; // reduce volume by ~20%
+// Success sound for stage completion overlays
+const successAudio = new Audio('success.wav');
+successAudio.preload = 'auto';
+successAudio.volume = 0.6; // reduce volume by ~20%
+
 // --- Startscreen Logik ---
 const readyBtn = document.getElementById("ready-btn");
 const clickWord = document.getElementById("click-word");
@@ -1676,9 +1689,18 @@ function setupCheckout() {
     // ABSURDE PASSWORT-VALIDIERUNG (Worst Practice!)
     const errors = validatePassword(passwordValue);
     if (errors.length > 0) {
+      // Play swapped sound: play `right.wav` when password is WRONG
+      if (audioRight && typeof audioRight.play === 'function') {
+        audioRight.play().catch(() => {});
+      }
       showErrorPopup("Passwort-Fehler: " + errors[0]);
       resetCheckoutForm();
       return;
+    }
+
+    // Play swapped sound: play `wrong.wav` when password is CORRECT
+    if (audioWrong && typeof audioWrong.play === 'function') {
+      audioWrong.play().catch(() => {});
     }
 
     // Zeige Newsletter-Popup (Worst Practice!)
@@ -4415,6 +4437,10 @@ function showSuccessOverlay(callback) {
   `;
   
   document.body.appendChild(overlay);
+  // Play success sound (non-blocking)
+  if (successAudio && typeof successAudio.play === 'function') {
+    successAudio.play().catch(() => {});
+  }
   
   // Nach 1.5 Sekunden ausblenden und callback ausführen
   setTimeout(() => {
