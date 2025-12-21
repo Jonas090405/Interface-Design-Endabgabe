@@ -4612,6 +4612,14 @@ document.getElementById("submit-btn").onclick = () => {
 };
 
 function displayEndScreen() {
+  // Stop alle Stage 2 Pop-ups und Intervalle
+  stopStage2PausePopup();
+  stopStage2Notifications();
+  
+  // Entferne alle Stage 2 Pop-ups und Notifications aus dem DOM
+  const stage2Popups = document.querySelectorAll('.stage2-pause-popup, .stage2-notification');
+  stage2Popups.forEach(popup => popup.remove());
+  
   document.getElementById("final-score").textContent = totalScore;
   
   // Format time display
